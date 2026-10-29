@@ -49,7 +49,7 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 
 ### 2. Open in Your Browser
 Visit:https://isl-avatar-studio.onrender.com
-**[http://127.0.0.1:8000](http://127.0.0.1:8000)**
+
 
 ---
 
