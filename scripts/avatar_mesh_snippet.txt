@@ -1,0 +1,1102 @@
+function buildHumanoidAvatar() {
+      const avatarRoot = new THREE.Group();
+      scene.add(avatarRoot);
+      avatarRig.root = avatarRoot;
+
+      // Realistic warm human skin tones (Cute female appearance)
+      const skinColor = 0xdba178; // Warm soft Indian complexion
+      const skinMat = new THREE.MeshStandardMaterial({
+        color: skinColor,
+        roughness: 0.58,
+        metalness: 0.02
+      });
+      avatarRig.skinMat = skinMat;
+
+      // Soft Blush / Lip shade
+      const lipMat = new THREE.MeshStandardMaterial({
+        color: 0xba5f58,
+        roughness: 0.45,
+        metalness: 0.0
+      });
+
+      // Elegant feminine attire (Chic pastel slate blazer & clean inner top)
+      const outfitMat = new THREE.MeshStandardMaterial({
+        color: 0x222a3d, // Deep indigo blazer
+        roughness: 0.70,
+        metalness: 0.08
+      });
+
+      const topMat = new THREE.MeshStandardMaterial({
+        color: 0xf3f4f8, // Soft ivory inner top
+        roughness: 0.60,
+        metalness: 0.02
+      });
+
+      const accentMat = new THREE.MeshStandardMaterial({
+        color: 0x1e293b,
+        roughness: 0.70,
+        metalness: 0.05
+      });
+
+      const hairMat = new THREE.MeshStandardMaterial({
+        color: 0x16110e, // Rich dark brunette hair
+        roughness: 0.82,
+        metalness: 0.05
+      });
+
+      const eyeIrisMat = new THREE.MeshBasicMaterial({ color: 0x28180e });
+      const scleraMat = new THREE.MeshBasicMaterial({ color: 0xfafafa });
+      const browMat = new THREE.MeshStandardMaterial({ color: 0x16110e, roughness: 0.9 });
+
+      // 1. Lower Body & Pelvis
+      const pelvis = new THREE.Group();
+      pelvis.position.y = 0.85;
+      avatarRoot.add(pelvis);
+      avatarRig.pelvis = pelvis;
+
+      const legL = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.055, 0.75, 18), outfitMat);
+      legL.position.set(-0.10, -0.42, 0);
+      pelvis.add(legL);
+
+      const legR = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.055, 0.75, 18), outfitMat);
+      legR.position.set(0.10, -0.42, 0);
+      pelvis.add(legR);
+
+      // Elegant Shoes
+      const shoeGeo = new THREE.BoxGeometry(0.090, 0.060, 0.19);
+      const shoeMat = new THREE.MeshStandardMaterial({ color: 0x0f131a, roughness: 0.4 });
+      const shoeL = new THREE.Mesh(shoeGeo, shoeMat);
+      shoeL.position.set(-0.10, -0.80, 0.035);
+      pelvis.add(shoeL);
+      const shoeR = new THREE.Mesh(shoeGeo, shoeMat);
+      shoeR.position.set(0.10, -0.80, 0.035);
+      pelvis.add(shoeR);
+
+      // 2. Spine & Torso (Soft feminine curves, not blocky)
+      const spine = new THREE.Group();
+      spine.position.y = 0.0;
+      pelvis.add(spine);
+      avatarRig.spine = spine;
+
+      // Waist & Hips
+      const waist = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.165, 0.22, 24), outfitMat);
+      waist.position.y = 0.11;
+      spine.add(waist);
+
+      // Upper Bust & Chest
+      const bust = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.15, 0.28, 24), outfitMat);
+      bust.position.y = 0.35;
+      spine.add(bust);
+
+      // White inner top insert
+      const topInsert = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.08, 0.16, 16), topMat);
+      topInsert.position.set(0, 0.41, 0.085);
+      spine.add(topInsert);
+
+      // Natural subtle fabric button on blouse
+      const button = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.004, 16), outfitMat);
+      button.rotation.x = Math.PI / 2;
+      button.position.set(0, 0.38, 0.155);
+      spine.add(button);
+
+      // Smooth Anatomical Clavicle / Shoulder Bridge
+      const clavicleYoke = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 0.44, 20), outfitMat);
+      clavicleYoke.rotation.z = Math.PI / 2;
+      clavicleYoke.position.set(0, 0.44, 0.0);
+      spine.add(clavicleYoke);
+
+      // 3. Slender Neck & Expressive Female Head
+      const neck = new THREE.Group();
+      neck.position.set(0, 0.50, 0.015);
+      spine.add(neck);
+      avatarRig.neck = neck;
+
+      const neckMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.058, 0.12, 20), skinMat);
+      neckMesh.position.y = 0.05;
+      neck.add(neckMesh);
+
+      // Natural neckline contour
+      const neckShadow = new THREE.Mesh(new THREE.TorusGeometry(0.049, 0.003, 8, 24), outfitMat);
+      neckShadow.rotation.x = Math.PI / 2;
+      neckShadow.position.y = 0.03;
+      neck.add(neckShadow);
+
+      const head = new THREE.Group();
+      head.position.set(0, 0.12, 0.01);
+      neck.add(head);
+      avatarRig.head = head;
+
+      // Soft Humanoid Face Mesh (Cute almond shape)
+      const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.128, 28, 28), skinMat);
+      headMesh.scale.set(0.94, 1.22, 1.05);
+      head.add(headMesh);
+
+      // Soft rounded feminine chin
+      const chinMesh = new THREE.Mesh(new THREE.ConeGeometry(0.065, 0.09, 20), skinMat);
+      chinMesh.position.set(0, -0.085, 0.035);
+      chinMesh.rotation.x = Math.PI;
+      head.add(chinMesh);
+
+      // Soft sculpted nose
+      const noseGeo = new THREE.ConeGeometry(0.018, 0.054, 16);
+      const nose = new THREE.Mesh(noseGeo, skinMat);
+      nose.position.set(0, -0.012, 0.138);
+      nose.rotation.x = Math.PI / 10;
+      head.add(nose);
+
+      // Expressive Lips (Natural smile & mouthing)
+      const lipGeo = new THREE.BoxGeometry(0.046, 0.014, 0.020);
+      const lips = new THREE.Mesh(lipGeo, lipMat);
+      lips.position.set(0, -0.058, 0.134);
+      head.add(lips);
+      avatarRig.lips = lips;
+
+      // Big, Expressive Almond Eyes with Blinking Eyelids
+      function createEye(isLeft) {
+        const eyeGroup = new THREE.Group();
+        const xSign = isLeft ? -1 : 1;
+        eyeGroup.position.set(xSign * 0.045, 0.022, 0.126);
+
+        // Sclera
+        const sclera = new THREE.Mesh(new THREE.SphereGeometry(0.020, 20, 20), scleraMat);
+        sclera.scale.set(1.22, 0.85, 0.80);
+        eyeGroup.add(sclera);
+
+        // Warm Brown Iris
+        const iris = new THREE.Mesh(new THREE.CircleGeometry(0.011, 20), eyeIrisMat);
+        iris.position.set(0, 0, 0.017);
+        eyeGroup.add(iris);
+
+        // Cute Sparkling Highlights
+        const glint1 = new THREE.Mesh(new THREE.CircleGeometry(0.0035, 12), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+        glint1.position.set(0.003, 0.003, 0.018);
+        eyeGroup.add(glint1);
+
+        const glint2 = new THREE.Mesh(new THREE.CircleGeometry(0.0018, 8), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+        glint2.position.set(-0.003, -0.003, 0.018);
+        eyeGroup.add(glint2);
+
+        // Eyelid for Smooth Blinking
+        const lidGeo = new THREE.SphereGeometry(0.022, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2);
+        const lid = new THREE.Mesh(lidGeo, skinMat);
+        lid.rotation.x = -Math.PI / 2;
+        lid.position.set(0, 0.006, 0.003);
+        eyeGroup.add(lid);
+
+        return { eyeGroup, lid };
+      }
+
+      const leftEyeObj = createEye(true);
+      const rightEyeObj = createEye(false);
+      head.add(leftEyeObj.eyeGroup);
+      head.add(rightEyeObj.eyeGroup);
+      avatarRig.leftLid = leftEyeObj.lid;
+      avatarRig.rightLid = rightEyeObj.lid;
+
+      // Cute Dynamic Eyebrows (Physical motion for ISL markers)
+      const browGeo = new THREE.BoxGeometry(0.042, 0.008, 0.010);
+      const browL = new THREE.Mesh(browGeo, browMat);
+      browL.position.set(-0.045, 0.054, 0.130);
+      browL.rotation.z = -0.05;
+      head.add(browL);
+      avatarRig.browL = browL;
+
+      const browR = new THREE.Mesh(browGeo, browMat);
+      browR.position.set(0.045, 0.054, 0.130);
+      browR.rotation.z = 0.05;
+      head.add(browR);
+      avatarRig.browR = browR;
+
+      // Stylish Hair (Brunette with cute ponytail & bangs)
+      const hairBase = new THREE.Mesh(new THREE.SphereGeometry(0.136, 24, 24), hairMat);
+      hairBase.position.set(0, 0.038, -0.015);
+      hairBase.scale.set(1.02, 1.20, 1.08);
+      head.add(hairBase);
+
+      // Cute High Ponytail
+      const ponytail = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.018, 0.24, 16), hairMat);
+      ponytail.rotation.x = -0.45;
+      ponytail.position.set(0, 0.06, -0.16);
+      head.add(ponytail);
+
+      // 4. Smooth Humanoid Arms (Natural shoulder & elbow curves, elbows stay DOWN!)
+      function createArm(isLeft) {
+        const xSign = isLeft ? -1 : 1;
+        const armGroup = new THREE.Group();
+        armGroup.position.set(xSign * 0.22, 0.44, 0.0);
+        spine.add(armGroup);
+
+        // Smooth Deltoid / Shoulder Contour (Natural human look)
+        const shoulderJointMesh = new THREE.Mesh(new THREE.SphereGeometry(0.058, 24, 24), outfitMat);
+        armGroup.add(shoulderJointMesh);
+
+        // Shoulder Pivot
+        const shoulder = new THREE.Group();
+        armGroup.add(shoulder);
+
+        // Upper Arm
+        const upperArmMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.046, 0.040, 0.28, 20), skinMat);
+        upperArmMesh.position.y = -0.14;
+        shoulder.add(upperArmMesh);
+
+        // Soft sleeve hem
+        const sleeveHem = new THREE.Mesh(new THREE.CylinderGeometry(0.050, 0.048, 0.06, 20), outfitMat);
+        sleeveHem.position.y = -0.03;
+        shoulder.add(sleeveHem);
+
+        // Smooth Elbow Pivot (Down by ribcage)
+        const elbow = new THREE.Group();
+        elbow.position.y = -0.28;
+        shoulder.add(elbow);
+
+        const elbowJointMesh = new THREE.Mesh(new THREE.SphereGeometry(0.044, 20, 20), skinMat);
+        elbow.add(elbowJointMesh);
+
+        // Forearm
+        const forearmMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.040, 0.034, 0.26, 20), skinMat);
+        forearmMesh.position.y = -0.13;
+        elbow.add(forearmMesh);
+
+        // Wrist Joint
+        const wrist = new THREE.Group();
+        wrist.position.y = -0.26;
+        elbow.add(wrist);
+
+        const wristJointMesh = new THREE.Mesh(new THREE.SphereGeometry(0.032, 16, 16), skinMat);
+        wrist.add(wristJointMesh);
+
+        // Delicate feminine hand palm
+        const palmGeo = new THREE.BoxGeometry(0.062, 0.076, 0.020);
+        const palm = new THREE.Mesh(palmGeo, skinMat);
+        palm.position.y = -0.038;
+        wrist.add(palm);
+
+        // 5 Fully Articulated Fingers
+        const fingers = {};
+
+        function buildFinger(name, posX, posY, baseLen) {
+          const baseJoint = new THREE.Group();
+          baseJoint.position.set(posX, posY, 0);
+          wrist.add(baseJoint);
+
+          // Knuckle
+          const knuckle = new THREE.Mesh(new THREE.SphereGeometry(0.0065, 8, 8), skinMat);
+          baseJoint.add(knuckle);
+
+          // Phalanx 1
+          const p1Mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.0068, 0.0062, baseLen * 0.45, 8), skinMat);
+          p1Mesh.position.y = -baseLen * 0.225;
+          baseJoint.add(p1Mesh);
+
+          // Mid Joint
+          const midJoint = new THREE.Group();
+          midJoint.position.y = -baseLen * 0.45;
+          baseJoint.add(midJoint);
+
+          // Phalanx 2
+          const p2Mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.0060, 0.0055, baseLen * 0.35, 8), skinMat);
+          p2Mesh.position.y = -baseLen * 0.175;
+          midJoint.add(p2Mesh);
+
+          // Tip Joint
+          const tipJoint = new THREE.Group();
+          tipJoint.position.y = -baseLen * 0.35;
+          midJoint.add(tipJoint);
+
+          // Phalanx 3 / Fingertip
+          const p3Mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.0052, 0.0044, baseLen * 0.25, 8), skinMat);
+          p3Mesh.position.y = -baseLen * 0.125;
+          tipJoint.add(p3Mesh);
+
+          return { base: baseJoint, mid: midJoint, tip: tipJoint };
+        }
+
+        // Thumb: Natural Opposable Angle
+        const thumbX = xSign * 0.034;
+        const thumbJoint = new THREE.Group();
+        thumbJoint.position.set(thumbX, -0.025, 0.008);
+        thumbJoint.rotation.z = xSign * 0.42;
+        thumbJoint.rotation.y = xSign * 0.28;
+        wrist.add(thumbJoint);
+
+        const thumbP1 = new THREE.Mesh(new THREE.CylinderGeometry(0.0078, 0.0068, 0.030, 8), skinMat);
+        thumbP1.position.y = -0.015;
+        thumbJoint.add(thumbP1);
+
+        const thumbTip = new THREE.Group();
+        thumbTip.position.y = -0.030;
+        thumbJoint.add(thumbTip);
+
+        const thumbP2 = new THREE.Mesh(new THREE.CylinderGeometry(0.0065, 0.0054, 0.024, 8), skinMat);
+        thumbP2.position.y = -0.012;
+        thumbTip.add(thumbP2);
+
+        fingers.thumb = { base: thumbJoint, mid: thumbTip, tip: thumbTip };
+
+        // 4 Articulated Fingers
+        const fingerSpacing = 0.015;
+        fingers.index = buildFinger("index", xSign * (fingerSpacing * 1.5), -0.074, 0.068);
+        fingers.middle = buildFinger("middle", xSign * (fingerSpacing * 0.5), -0.076, 0.075);
+        fingers.ring = buildFinger("ring", -xSign * (fingerSpacing * 0.5), -0.074, 0.070);
+        fingers.pinky = buildFinger("pinky", -xSign * (fingerSpacing * 1.5), -0.068, 0.056);
+
+        return {
+          shoulder,
+          elbow,
+          wrist,
+          fingers
+        };
+      }
+
+      avatarRig.leftArm = createArm(true);
+      avatarRig.rightArm = createArm(false);
+
+      applyPoseToAvatar(getRestingPose());
+    }
+
+    // --- ANATOMICAL ISL POSE LIBRARY (24 FULLY VERIFIED SIGNS) ---
+    const COMPUTED_POSES = {
+      "HELLO": {
+            "desc": "Namaste with both hands vertically joined at chest, elbows down",
+            "leftArm": {
+                  "shoulder": [
+                        -0.356,
+                        0.0,
+                        0.576
+                  ],
+                  "elbow": [
+                        -1.941,
+                        0.522,
+                        0.402
+                  ],
+                  "wrist": [
+                        -1.464,
+                        1.775,
+                        0.57
+                  ],
+                  "fingerCurl": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                  ]
+            },
+            "rightArm": {
+                  "shoulder": [
+                        -0.356,
+                        0.0,
+                        -0.576
+                  ],
+                  "elbow": [
+                        -1.941,
+                        -0.522,
+                        -0.402
+                  ],
+                  "wrist": [
+                        -1.464,
+                        -1.775,
+                        -0.57
+                  ],
+                  "fingerCurl": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                  ]
+            }
+      },
+      "YOU": {
+            "desc": "Right index pointing forward at user",
+            "rightArm": {
+                  "shoulder": [
+                        -0.994,
+                        -0.21,
+                        -0.626
+                  ],
+                  "elbow": [
+                        -0.851,
+                        -0.296,
+                        0.677
+                  ],
+                  "wrist": [
+                        0.256,
+                        -0.244,
+                        -0.098
+                  ],
+                  "fingerCurl": [
+                        0.95,
+                        0.0,
+                        0.95,
+                        0.95,
+                        0.95
+                  ]
+            }
+      },
+      "HOW": {
+            "desc": "Both cupped hands rotating palms-upward",
+            "leftArm": {
+                  "shoulder": [
+                        -0.258,
+                        -0.034,
+                        0.065
+                  ],
+                  "elbow": [
+                        -1.7,
+                        -0.171,
+                        0.25
+                  ],
+                  "wrist": [
+                        0.29,
+                        0.168,
+                        -0.26
+                  ],
+                  "fingerCurl": [
+                        0.35,
+                        0.35,
+                        0.35,
+                        0.35,
+                        0.35
+                  ]
+            },
+            "rightArm": {
+                  "shoulder": [
+                        -0.258,
+                        0.034,
+                        -0.065
+                  ],
+                  "elbow": [
+                        -1.7,
+                        0.171,
+                        -0.25
+                  ],
+                  "wrist": [
+                        0.29,
+                        -0.168,
+                        0.26
+                  ],
+                  "fingerCurl": [
+                        0.35,
+                        0.35,
+                        0.35,
+                        0.35,
+                        0.35
+                  ]
+            }
+      },
+      "THANK_YOU_START": {
+            "shoulder": [
+                  -0.105,
+                  1.154,
+                  -0.49
+            ],
+            "elbow": [
+                  -3.881,
+                  -0.209,
+                  -1.025
+            ],
+            "wrist": [
+                  -4.135,
+                  1.068,
+                  -1.838
+            ]
+      },
+      "THANK_YOU_END": {
+            "shoulder": [
+                  -0.398,
+                  -0.046,
+                  -0.165
+            ],
+            "elbow": [
+                  -1.441,
+                  0.019,
+                  -0.143
+            ],
+            "wrist": [
+                  0.192,
+                  -0.138,
+                  0.238
+            ]
+      },
+      "WELCOME": {
+            "leftArm": {
+                  "shoulder": [
+                        -0.185,
+                        -0.057,
+                        0.042
+                  ],
+                  "elbow": [
+                        -1.676,
+                        -0.253,
+                        0.345
+                  ],
+                  "wrist": [
+                        0.285,
+                        0.211,
+                        -0.342
+                  ],
+                  "fingerCurl": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                  ]
+            },
+            "rightArm": {
+                  "shoulder": [
+                        -0.185,
+                        0.057,
+                        -0.042
+                  ],
+                  "elbow": [
+                        -1.676,
+                        0.253,
+                        -0.345
+                  ],
+                  "wrist": [
+                        0.285,
+                        -0.211,
+                        0.342
+                  ],
+                  "fingerCurl": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                  ]
+            }
+      },
+      "PLEASE": {
+            "shoulder": [
+                  -4.011,
+                  -1.743,
+                  2.475
+            ],
+            "elbow": [
+                  -5.409,
+                  2.977,
+                  -8.872
+            ],
+            "wrist": [
+                  -4.041,
+                  -1.963,
+                  2.929
+            ]
+      },
+      "NAME": {
+            "right": {
+                  "shoulder": [
+                        -0.302,
+                        0.048,
+                        -0.184
+                  ],
+                  "elbow": [
+                        -0.762,
+                        0.777,
+                        -1.122
+                  ],
+                  "wrist": [
+                        0.763,
+                        2.299,
+                        -0.675
+                  ]
+            },
+            "left": {
+                  "shoulder": [
+                        -0.276,
+                        0.01,
+                        0.122
+                  ],
+                  "elbow": [
+                        -1.404,
+                        -0.428,
+                        0.688
+                  ],
+                  "wrist": [
+                        0.451,
+                        0.332,
+                        -0.182
+                  ]
+            }
+      },
+      "WHAT": {
+            "right": {
+                  "shoulder": [
+                        -0.084,
+                        0.146,
+                        0.03
+                  ],
+                  "elbow": [
+                        -1.713,
+                        0.313,
+                        -0.342
+                  ],
+                  "wrist": [
+                        0.165,
+                        -0.23,
+                        0.231
+                  ]
+            },
+            "left": {
+                  "shoulder": [
+                        -0.084,
+                        -0.146,
+                        -0.03
+                  ],
+                  "elbow": [
+                        -1.713,
+                        -0.313,
+                        0.342
+                  ],
+                  "wrist": [
+                        0.165,
+                        0.23,
+                        -0.231
+                  ]
+            }
+      },
+      "WHERE": {
+            "shoulder": [
+                  -3.77,
+                  1.164,
+                  -2.889
+            ],
+            "elbow": [
+                  -0.927,
+                  -0.05,
+                  -2.206
+            ],
+            "wrist": [
+                  -0.323,
+                  -0.715,
+                  -0.094
+            ]
+      },
+      "ME": {
+            "shoulder": [
+                  -0.117,
+                  -0.188,
+                  -0.027
+            ],
+            "elbow": [
+                  -0.975,
+                  1.027,
+                  -1.314
+            ],
+            "wrist": [
+                  0.941,
+                  -0.795,
+                  -1.546
+            ]
+      },
+      "HELP": {
+            "right": {
+                  "shoulder": [
+                        -0.522,
+                        -0.846,
+                        -0.267
+                  ],
+                  "elbow": [
+                        -0.941,
+                        -1.284,
+                        0.781
+                  ],
+                  "wrist": [
+                        0.581,
+                        -0.427,
+                        -0.111
+                  ]
+            },
+            "left": {
+                  "shoulder": [
+                        -0.295,
+                        0.092,
+                        0.137
+                  ],
+                  "elbow": [
+                        -1.378,
+                        -0.329,
+                        0.635
+                  ],
+                  "wrist": [
+                        0.258,
+                        0.328,
+                        -0.485
+                  ]
+            }
+      },
+      "WATER": {
+            "shoulder": [
+                  -0.134,
+                  0.784,
+                  -0.525
+            ],
+            "elbow": [
+                  1.717,
+                  -0.571,
+                  -1.577
+            ],
+            "wrist": [
+                  -0.559,
+                  2.268,
+                  0.652
+            ]
+      },
+      "FOOD": {
+            "shoulder": [
+                  -0.472,
+                  0.08,
+                  -0.283
+            ],
+            "elbow": [
+                  -1.97,
+                  0.408,
+                  -0.672
+            ],
+            "wrist": [
+                  0.503,
+                  -0.442,
+                  0.629
+            ]
+      },
+      "HOSPITAL": {
+            "shoulder": [
+                  -0.292,
+                  0.039,
+                  -0.681
+            ],
+            "elbow": [
+                  -0.266,
+                  0.246,
+                  -1.445
+            ],
+            "wrist": [
+                  -0.995,
+                  -2.1,
+                  0.098
+            ]
+      },
+      "DOCTOR": {
+            "right": {
+                  "shoulder": [
+                        0.01,
+                        0.876,
+                        -0.523
+                  ],
+                  "elbow": [
+                        0.928,
+                        0.008,
+                        -1.336
+                  ],
+                  "wrist": [
+                        -0.728,
+                        0.674,
+                        0.029
+                  ]
+            },
+            "left": {
+                  "shoulder": [
+                        -0.186,
+                        -0.061,
+                        0.08
+                  ],
+                  "elbow": [
+                        -1.473,
+                        -0.438,
+                        0.621
+                  ],
+                  "wrist": [
+                        0.292,
+                        0.376,
+                        -0.091
+                  ]
+            }
+      },
+      "TIME": {
+            "right": {
+                  "shoulder": [
+                        0.335,
+                        1.146,
+                        -0.839
+                  ],
+                  "elbow": [
+                        0.64,
+                        2.759,
+                        1.081
+                  ],
+                  "wrist": [
+                        1.185,
+                        -2.162,
+                        0.423
+                  ]
+            },
+            "left": {
+                  "shoulder": [
+                        -0.163,
+                        -0.111,
+                        0.109
+                  ],
+                  "elbow": [
+                        -0.755,
+                        -0.917,
+                        1.109
+                  ],
+                  "wrist": [
+                        0.583,
+                        -2.068,
+                        0.468
+                  ]
+            }
+      },
+      "TODAY": {
+            "right": {
+                  "shoulder": [
+                        -0.119,
+                        0.089,
+                        -0.016
+                  ],
+                  "elbow": [
+                        -1.681,
+                        0.321,
+                        -0.414
+                  ],
+                  "wrist": [
+                        0.261,
+                        -0.253,
+                        0.378
+                  ]
+            },
+            "left": {
+                  "shoulder": [
+                        -0.119,
+                        -0.089,
+                        0.016
+                  ],
+                  "elbow": [
+                        -1.681,
+                        -0.321,
+                        0.414
+                  ],
+                  "wrist": [
+                        0.261,
+                        0.253,
+                        -0.378
+                  ]
+            }
+      },
+      "GOOD": {
+            "shoulder": [
+                  -0.41,
+                  -0.578,
+                  -0.105
+            ],
+            "elbow": [
+                  -0.927,
+                  -1.087,
+                  0.832
+            ],
+            "wrist": [
+                  0.242,
+                  -0.488,
+                  -0.279
+            ]
+      },
+      "MORNING": {
+            "left": {
+                  "shoulder": [
+                        -0.215,
+                        -0.026,
+                        0.079
+                  ],
+                  "elbow": [
+                        -0.556,
+                        -0.83,
+                        1.301
+                  ],
+                  "wrist": [
+                        0.792,
+                        -0.572,
+                        0.04
+                  ]
+            },
+            "right_lo": {
+                  "shoulder": [
+                        -0.144,
+                        -0.163,
+                        -0.065
+                  ],
+                  "elbow": [
+                        -1.501,
+                        0.347,
+                        -0.696
+                  ],
+                  "wrist": [
+                        -0.352,
+                        -0.798,
+                        0.562
+                  ]
+            },
+            "right_hi": {
+                  "shoulder": [
+                        -3.981,
+                        0.878,
+                        -2.63
+                  ],
+                  "elbow": [
+                        -1.183,
+                        0.333,
+                        -2.829
+                  ],
+                  "wrist": [
+                        -0.014,
+                        -0.406,
+                        0.346
+                  ]
+            }
+      },
+      "YES": {
+            "shoulder": [
+                  -0.329,
+                  0.05,
+                  -0.082
+            ],
+            "elbow": [
+                  -1.758,
+                  0.205,
+                  -0.297
+            ],
+            "wrist": [
+                  0.393,
+                  -0.177,
+                  0.312
+            ]
+      },
+      "NO": {
+            "shoulder": [
+                  -3.865,
+                  1.155,
+                  -2.848
+            ],
+            "elbow": [
+                  -0.861,
+                  -0.235,
+                  -2.176
+            ],
+            "wrist": [
+                  -0.345,
+                  -0.884,
+                  -0.092
+            ]
+      },
+      "INDIA": {
+            "shoulder": [
+                  -0.719,
+                  0.13,
+                  -0.462
+            ],
+            "elbow": [
+                  -1.963,
+                  0.347,
+                  -0.716
+            ],
+            "wrist": [
+                  0.912,
+                  -0.259,
+                  0.719
+            ]
+      },
+      "NICE": {
+            "left": {
+                  "shoulder": [
+                        -0.258,
+                        0.027,
+                        0.107
+                  ],
+                  "elbow": [
+                        -1.365,
+                        -0.409,
+                        0.673
+                  ],
+                  "wrist": [
+                        0.321,
+                        0.36,
+                        -0.135
+                  ]
+            },
+            "right_start": {
+                  "shoulder": [
+                        -0.565,
+                        -0.815,
+                        -0.441
+                  ],
+                  "elbow": [
+                        -4.066,
+                        -1.658,
+                        3.799
+                  ],
+                  "wrist": [
+                        1.327,
+                        -1.967,
+                        0.266
+                  ]
+            },
+            "right_end": {
+                  "shoulder": [
+                        -0.557,
+                        1.987,
+                        0.004
+                  ],
+                  "elbow": [
+                        -3.168,
+                        -2.049,
+                        1.683
+                  ],
+                  "wrist": [
+                        3.848,
+                        1.106,
+                        1.684
+                  ]
+            }
+      },
+      "MEET": {
+            "right": {
+                  "shoulder": [
+                        -0.377,
+                        -0.15,
+                        -0.23
+                  ],
+                  "elbow": [
+                        -1.697,
+                        0.074,
+                        -0.359
+                  ],
+                  "wrist": [
+                        -0.682,
+                        -2.086,
+                        -0.266
+                  ]
+            },
+            "left": {
+                  "shoulder": [
+                        -0.374,
+                        0.149,
+                        0.228
+                  ],
+                  "elbow": [
+                        -1.698,
+                        -0.077,
+                        0.361
+                  ],
+                  "wrist": [
+                        -0.683,
+                        2.088,
+                        0.267
+                  ]
+            }
+      }
+};
+
+    function getRestingPose

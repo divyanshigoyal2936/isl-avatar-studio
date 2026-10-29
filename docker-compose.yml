@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=ISL Avatar Studio
+      - DATABASE_URL=sqlite:///./isl_avatar.db
+      - EMBEDDING_MODEL_NAME=all-MiniLM-L6-v2
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
