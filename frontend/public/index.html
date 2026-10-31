@@ -614,6 +614,17 @@
             child.userData.initialRotation = child.rotation.clone();
             child.userData.initialQuaternion = child.quaternion.clone();
             child.userData.initialPosition = child.position.clone();
+
+            // Feminine Proportion Refinement: slender, graceful hands, delicate wrists & forearms
+            if (child.name === 'LeftHand' || child.name === 'RightHand') {
+              child.scale.set(0.78, 0.84, 0.78); // Slender, petite feminine hands
+            }
+            if (child.name === 'LeftForeArm' || child.name === 'RightForeArm') {
+              child.scale.set(0.84, 0.92, 0.84); // Smooth, slender feminine forearm
+            }
+            if (child.name === 'LeftArm' || child.name === 'RightArm') {
+              child.scale.set(0.88, 0.96, 0.88); // Natural feminine shoulder & arm contour
+            }
           }
         });
 
@@ -646,768 +657,324 @@
     // --- ANATOMICAL ISL POSE LIBRARY (24 FULLY VERIFIED SIGNS) ---
     const COMPUTED_POSES = {
       "HELLO": {
-            "desc": "Namaste with both hands vertically joined at chest, elbows down",
-            "leftArm": {
-                  "shoulder": [
-                        -0.356,
-                        0.0,
-                        0.576
-                  ],
-                  "elbow": [
-                        -1.941,
-                        0.522,
-                        0.402
-                  ],
-                  "wrist": [
-                        -1.464,
-                        1.775,
-                        0.57
-                  ],
-                  "fingerCurl": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0
-                  ]
-            },
-            "rightArm": {
-                  "shoulder": [
-                        -0.356,
-                        0.0,
-                        -0.576
-                  ],
-                  "elbow": [
-                        -1.941,
-                        -0.522,
-                        -0.402
-                  ],
-                  "wrist": [
-                        -1.464,
-                        -1.775,
-                        -0.57
-                  ],
-                  "fingerCurl": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0
-                  ]
-            }
+        "desc": "Namaste with both palms flush together at mid-chest, fingers straight up",
+        "leftArm": {
+          "shoulder": [1.154, 0.099, 0.901],
+          "elbow": [-0.057, 0.255, 1.732],
+          "wrist": [-0.828, 0.437, 0.572],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        },
+        "rightArm": {
+          "shoulder": [1.154, -0.099, -0.901],
+          "elbow": [-0.057, -0.255, -1.732],
+          "wrist": [-0.828, -0.437, -0.572],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        }
       },
       "YOU": {
-            "desc": "Right index pointing forward at user",
-            "rightArm": {
-                  "shoulder": [
-                        -0.994,
-                        -0.21,
-                        -0.626
-                  ],
-                  "elbow": [
-                        -0.851,
-                        -0.296,
-                        0.677
-                  ],
-                  "wrist": [
-                        0.256,
-                        -0.244,
-                        -0.098
-                  ],
-                  "fingerCurl": [
-                        0.95,
-                        0.0,
-                        0.95,
-                        0.95,
-                        0.95
-                  ]
-            }
+        "desc": "Right index pointing smoothly forward at viewer",
+        "rightArm": {
+          "shoulder": [1.072, 0.335, -0.776],
+          "elbow": [-0.106, 0.253, -1.157],
+          "wrist": [-0.299, -0.140, -0.029],
+          "fingerCurl": [0.70, 0.0, 0.85, 0.85, 0.85]
+        }
       },
       "HOW": {
-            "desc": "Both cupped hands rotating palms-upward",
-            "leftArm": {
-                  "shoulder": [
-                        -0.258,
-                        -0.034,
-                        0.065
-                  ],
-                  "elbow": [
-                        -1.7,
-                        -0.171,
-                        0.25
-                  ],
-                  "wrist": [
-                        0.29,
-                        0.168,
-                        -0.26
-                  ],
-                  "fingerCurl": [
-                        0.35,
-                        0.35,
-                        0.35,
-                        0.35,
-                        0.35
-                  ]
-            },
-            "rightArm": {
-                  "shoulder": [
-                        -0.258,
-                        0.034,
-                        -0.065
-                  ],
-                  "elbow": [
-                        -1.7,
-                        0.171,
-                        -0.25
-                  ],
-                  "wrist": [
-                        0.29,
-                        -0.168,
-                        0.26
-                  ],
-                  "fingerCurl": [
-                        0.35,
-                        0.35,
-                        0.35,
-                        0.35,
-                        0.35
-                  ]
-            }
+        "desc": "Both curved palms meeting in center and rotating open into inquiry",
+        "leftArm": {
+          "shoulder": [1.100, 0.080, 0.750],
+          "elbow": [-0.040, 0.220, 1.450],
+          "wrist": [-0.500, 0.350, 0.400],
+          "fingerCurl": [0.20, 0.20, 0.20, 0.20, 0.20]
+        },
+        "rightArm": {
+          "shoulder": [1.100, -0.080, -0.750],
+          "elbow": [-0.040, -0.220, -1.450],
+          "wrist": [-0.500, -0.350, -0.400],
+          "fingerCurl": [0.20, 0.20, 0.20, 0.20, 0.20]
+        }
       },
       "THANK_YOU_START": {
-            "shoulder": [
-                  -0.105,
-                  1.154,
-                  -0.49
-            ],
-            "elbow": [
-                  -3.881,
-                  -0.209,
-                  -1.025
-            ],
-            "wrist": [
-                  -4.135,
-                  1.068,
-                  -1.838
-            ]
+        "shoulder": [1.250, 0.434, -0.897],
+        "elbow": [0.152, 0.336, -1.601],
+        "wrist": [-0.341, -0.251, -0.204],
+        "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
       },
       "THANK_YOU_END": {
-            "shoulder": [
-                  -0.398,
-                  -0.046,
-                  -0.165
-            ],
-            "elbow": [
-                  -1.441,
-                  0.019,
-                  -0.143
-            ],
-            "wrist": [
-                  0.192,
-                  -0.138,
-                  0.238
-            ]
+        "shoulder": [1.002, 0.314, -0.812],
+        "elbow": [-0.072, 0.292, -1.182],
+        "wrist": [-0.360, -0.152, -0.092],
+        "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
       },
       "WELCOME": {
-            "leftArm": {
-                  "shoulder": [
-                        -0.185,
-                        -0.057,
-                        0.042
-                  ],
-                  "elbow": [
-                        -1.676,
-                        -0.253,
-                        0.345
-                  ],
-                  "wrist": [
-                        0.285,
-                        0.211,
-                        -0.342
-                  ],
-                  "fingerCurl": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0
-                  ]
-            },
-            "rightArm": {
-                  "shoulder": [
-                        -0.185,
-                        0.057,
-                        -0.042
-                  ],
-                  "elbow": [
-                        -1.676,
-                        0.253,
-                        -0.345
-                  ],
-                  "wrist": [
-                        0.285,
-                        -0.211,
-                        0.342
-                  ],
-                  "fingerCurl": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0
-                  ]
-            }
+        "desc": "Both open palms facing up and inviting forward",
+        "leftArm": {
+          "shoulder": [1.020, -0.150, 0.650],
+          "elbow": [0.050, 0.180, 0.950],
+          "wrist": [-0.150, 0.250, 0.350],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        },
+        "rightArm": {
+          "shoulder": [1.020, 0.150, -0.650],
+          "elbow": [0.050, -0.180, -0.950],
+          "wrist": [-0.150, -0.250, -0.350],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        }
       },
       "PLEASE": {
-            "shoulder": [
-                  -4.011,
-                  -1.743,
-                  2.475
-            ],
-            "elbow": [
-                  -5.409,
-                  2.977,
-                  -8.872
-            ],
-            "wrist": [
-                  -4.041,
-                  -1.963,
-                  2.929
-            ]
+        "desc": "Both hands joined gently at chest in respectful appeal",
+        "leftArm": {
+          "shoulder": [1.154, 0.099, 0.901],
+          "elbow": [-0.057, 0.255, 1.732],
+          "wrist": [-0.828, 0.437, 0.572],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        },
+        "rightArm": {
+          "shoulder": [1.154, -0.099, -0.901],
+          "elbow": [-0.057, -0.255, -1.732],
+          "wrist": [-0.828, -0.437, -0.572],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        }
       },
       "NAME": {
-            "right": {
-                  "shoulder": [
-                        -0.302,
-                        0.048,
-                        -0.184
-                  ],
-                  "elbow": [
-                        -0.762,
-                        0.777,
-                        -1.122
-                  ],
-                  "wrist": [
-                        0.763,
-                        2.299,
-                        -0.675
-                  ]
-            },
-            "left": {
-                  "shoulder": [
-                        -0.276,
-                        0.01,
-                        0.122
-                  ],
-                  "elbow": [
-                        -1.404,
-                        -0.428,
-                        0.688
-                  ],
-                  "wrist": [
-                        0.451,
-                        0.332,
-                        -0.182
-                  ]
-            }
+        "desc": "H-handshape tapped respectfully",
+        "rightArm": {
+          "shoulder": [1.100, 0.280, -0.760],
+          "elbow": [-0.050, 0.220, -1.250],
+          "wrist": [-0.280, -0.120, -0.050],
+          "fingerCurl": [0.70, 0.0, 0.0, 0.85, 0.85]
+        }
       },
       "WHAT": {
-            "right": {
-                  "shoulder": [
-                        -0.084,
-                        0.146,
-                        0.03
-                  ],
-                  "elbow": [
-                        -1.713,
-                        0.313,
-                        -0.342
-                  ],
-                  "wrist": [
-                        0.165,
-                        -0.23,
-                        0.231
-                  ]
-            },
-            "left": {
-                  "shoulder": [
-                        -0.084,
-                        -0.146,
-                        -0.03
-                  ],
-                  "elbow": [
-                        -1.713,
-                        -0.313,
-                        0.342
-                  ],
-                  "wrist": [
-                        0.165,
-                        0.23,
-                        -0.231
-                  ]
-            }
+        "desc": "Open palms facing up, questioning motion",
+        "leftArm": {
+          "shoulder": [0.950, -0.120, 0.580],
+          "elbow": [0.020, 0.150, 0.880],
+          "wrist": [-0.100, 0.200, 0.300],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        },
+        "rightArm": {
+          "shoulder": [0.950, 0.120, -0.580],
+          "elbow": [0.020, -0.150, -0.880],
+          "wrist": [-0.100, -0.200, -0.300],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        }
       },
       "WHERE": {
-            "shoulder": [
-                  -3.77,
-                  1.164,
-                  -2.889
-            ],
-            "elbow": [
-                  -0.927,
-                  -0.05,
-                  -2.206
-            ],
-            "wrist": [
-                  -0.323,
-                  -0.715,
-                  -0.094
-            ]
+        "desc": "Right index upright in inquiry",
+        "rightArm": {
+          "shoulder": [1.150, 0.300, -0.750],
+          "elbow": [-0.080, 0.220, -1.250],
+          "wrist": [-0.250, -0.120, -0.050],
+          "fingerCurl": [0.80, 0.0, 0.85, 0.85, 0.85]
+        }
       },
       "ME": {
-            "shoulder": [
-                  -0.117,
-                  -0.188,
-                  -0.027
-            ],
-            "elbow": [
-                  -0.975,
-                  1.027,
-                  -1.314
-            ],
-            "wrist": [
-                  0.941,
-                  -0.795,
-                  -1.546
-            ]
+        "desc": "Right index finger pointing at center of chest",
+        "rightArm": {
+          "shoulder": [1.207, 0.679, 0.483],
+          "elbow": [2.049, -0.314, 0.441],
+          "wrist": [0.276, -0.518, 1.708],
+          "fingerCurl": [0.70, 0.0, 0.85, 0.85, 0.85]
+        }
       },
       "HELP": {
-            "right": {
-                  "shoulder": [
-                        -0.522,
-                        -0.846,
-                        -0.267
-                  ],
-                  "elbow": [
-                        -0.941,
-                        -1.284,
-                        0.781
-                  ],
-                  "wrist": [
-                        0.581,
-                        -0.427,
-                        -0.111
-                  ]
-            },
-            "left": {
-                  "shoulder": [
-                        -0.295,
-                        0.092,
-                        0.137
-                  ],
-                  "elbow": [
-                        -1.378,
-                        -0.329,
-                        0.635
-                  ],
-                  "wrist": [
-                        0.258,
-                        0.328,
-                        -0.485
-                  ]
-            }
+        "desc": "Left palm supports right fist as both lift gently",
+        "leftArm": {
+          "shoulder": [1.050, 0.050, 0.650],
+          "elbow": [0.000, 0.150, 1.150],
+          "wrist": [-0.350, 0.250, 0.400],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        },
+        "rightArm": {
+          "shoulder": [1.080, -0.050, -0.680],
+          "elbow": [0.020, -0.150, -1.180],
+          "wrist": [-0.350, -0.250, -0.400],
+          "fingerCurl": [0.0, 0.85, 0.85, 0.85, 0.85]
+        }
       },
       "WATER": {
-            "shoulder": [
-                  -0.134,
-                  0.784,
-                  -0.525
-            ],
-            "elbow": [
-                  1.717,
-                  -0.571,
-                  -1.577
-            ],
-            "wrist": [
-                  -0.559,
-                  2.268,
-                  0.652
-            ]
+        "desc": "W-handshape gently near lips",
+        "rightArm": {
+          "shoulder": [1.220, 0.400, -0.850],
+          "elbow": [0.120, 0.300, -1.550],
+          "wrist": [-0.300, -0.220, -0.180],
+          "fingerCurl": [0.80, 0.0, 0.0, 0.0, 0.85]
+        }
       },
       "FOOD": {
-            "shoulder": [
-                  -0.472,
-                  0.08,
-                  -0.283
-            ],
-            "elbow": [
-                  -1.97,
-                  0.408,
-                  -0.672
-            ],
-            "wrist": [
-                  0.503,
-                  -0.442,
-                  0.629
-            ]
+        "desc": "Gathered fingertips tapping towards mouth",
+        "rightArm": {
+          "shoulder": [1.240, 0.420, -0.880],
+          "elbow": [0.140, 0.320, -1.580],
+          "wrist": [-0.320, -0.240, -0.200],
+          "fingerCurl": [0.55, 0.55, 0.55, 0.55, 0.55]
+        }
       },
       "HOSPITAL": {
-            "shoulder": [
-                  -0.292,
-                  0.039,
-                  -0.681
-            ],
-            "elbow": [
-                  -0.266,
-                  0.246,
-                  -1.445
-            ],
-            "wrist": [
-                  -0.995,
-                  -2.1,
-                  0.098
-            ]
+        "desc": "Right fingers tracing cross on left upper arm",
+        "leftArm": {
+          "shoulder": [0.850, 0.080, 0.250],
+          "elbow": [0.020, -0.020, 0.450],
+          "wrist": [0.040, -0.200, -0.080],
+          "fingerCurl": [0.20, 0.20, 0.20, 0.20, 0.20]
+        },
+        "rightArm": {
+          "shoulder": [1.150, 0.350, -0.700],
+          "elbow": [0.050, 0.250, -1.450],
+          "wrist": [-0.400, -0.200, -0.250],
+          "fingerCurl": [0.70, 0.0, 0.0, 0.70, 0.70]
+        }
       },
       "DOCTOR": {
-            "right": {
-                  "shoulder": [
-                        0.01,
-                        0.876,
-                        -0.523
-                  ],
-                  "elbow": [
-                        0.928,
-                        0.008,
-                        -1.336
-                  ],
-                  "wrist": [
-                        -0.728,
-                        0.674,
-                        0.029
-                  ]
-            },
-            "left": {
-                  "shoulder": [
-                        -0.186,
-                        -0.061,
-                        0.08
-                  ],
-                  "elbow": [
-                        -1.473,
-                        -0.438,
-                        0.621
-                  ],
-                  "wrist": [
-                        0.292,
-                        0.376,
-                        -0.091
-                  ]
-            }
+        "desc": "Right fingers tapping pulse on left wrist",
+        "leftArm": {
+          "shoulder": [1.100, 0.100, 0.800],
+          "elbow": [-0.050, 0.200, 1.400],
+          "wrist": [-0.600, 0.300, 0.450],
+          "fingerCurl": [0.20, 0.20, 0.20, 0.20, 0.20]
+        },
+        "rightArm": {
+          "shoulder": [1.120, -0.080, -0.780],
+          "elbow": [-0.040, -0.180, -1.350],
+          "wrist": [-0.550, -0.280, -0.420],
+          "fingerCurl": [0.70, 0.0, 0.0, 0.70, 0.70]
+        }
       },
       "TIME": {
-            "right": {
-                  "shoulder": [
-                        0.335,
-                        1.146,
-                        -0.839
-                  ],
-                  "elbow": [
-                        0.64,
-                        2.759,
-                        1.081
-                  ],
-                  "wrist": [
-                        1.185,
-                        -2.162,
-                        0.423
-                  ]
-            },
-            "left": {
-                  "shoulder": [
-                        -0.163,
-                        -0.111,
-                        0.109
-                  ],
-                  "elbow": [
-                        -0.755,
-                        -0.917,
-                        1.109
-                  ],
-                  "wrist": [
-                        0.583,
-                        -2.068,
-                        0.468
-                  ]
-            }
+        "desc": "Right index tapping wristwatch on left wrist",
+        "leftArm": {
+          "shoulder": [1.100, 0.100, 0.800],
+          "elbow": [-0.050, 0.200, 1.400],
+          "wrist": [-0.600, 0.300, 0.450],
+          "fingerCurl": [0.20, 0.20, 0.20, 0.20, 0.20]
+        },
+        "rightArm": {
+          "shoulder": [1.120, -0.080, -0.780],
+          "elbow": [-0.040, -0.180, -1.350],
+          "wrist": [-0.550, -0.280, -0.420],
+          "fingerCurl": [0.70, 0.0, 0.85, 0.85, 0.85]
+        }
       },
       "TODAY": {
-            "right": {
-                  "shoulder": [
-                        -0.119,
-                        0.089,
-                        -0.016
-                  ],
-                  "elbow": [
-                        -1.681,
-                        0.321,
-                        -0.414
-                  ],
-                  "wrist": [
-                        0.261,
-                        -0.253,
-                        0.378
-                  ]
-            },
-            "left": {
-                  "shoulder": [
-                        -0.119,
-                        -0.089,
-                        0.016
-                  ],
-                  "elbow": [
-                        -1.681,
-                        -0.321,
-                        0.414
-                  ],
-                  "wrist": [
-                        0.261,
-                        0.253,
-                        -0.378
-                  ]
-            }
+        "desc": "Both hands moving downward firmly in front of body",
+        "leftArm": {
+          "shoulder": [0.980, -0.100, 0.600],
+          "elbow": [0.020, 0.150, 0.900],
+          "wrist": [-0.100, 0.200, 0.300],
+          "fingerCurl": [0.0, 0.70, 0.70, 0.70, 0.0]
+        },
+        "rightArm": {
+          "shoulder": [0.980, 0.100, -0.600],
+          "elbow": [0.020, -0.150, -0.900],
+          "wrist": [-0.100, -0.200, -0.300],
+          "fingerCurl": [0.0, 0.70, 0.70, 0.70, 0.0]
+        }
       },
       "GOOD": {
-            "shoulder": [
-                  -0.41,
-                  -0.578,
-                  -0.105
-            ],
-            "elbow": [
-                  -0.927,
-                  -1.087,
-                  0.832
-            ],
-            "wrist": [
-                  0.242,
-                  -0.488,
-                  -0.279
-            ]
+        "desc": "Right thumb upright in friendly approval",
+        "rightArm": {
+          "shoulder": [1.072, 0.335, -0.776],
+          "elbow": [-0.106, 0.253, -1.157],
+          "wrist": [-0.299, -0.140, -0.029],
+          "fingerCurl": [0.0, 0.90, 0.90, 0.90, 0.90]
+        }
       },
       "MORNING": {
-            "left": {
-                  "shoulder": [
-                        -0.215,
-                        -0.026,
-                        0.079
-                  ],
-                  "elbow": [
-                        -0.556,
-                        -0.83,
-                        1.301
-                  ],
-                  "wrist": [
-                        0.792,
-                        -0.572,
-                        0.04
-                  ]
-            },
-            "right_lo": {
-                  "shoulder": [
-                        -0.144,
-                        -0.163,
-                        -0.065
-                  ],
-                  "elbow": [
-                        -1.501,
-                        0.347,
-                        -0.696
-                  ],
-                  "wrist": [
-                        -0.352,
-                        -0.798,
-                        0.562
-                  ]
-            },
-            "right_hi": {
-                  "shoulder": [
-                        -3.981,
-                        0.878,
-                        -2.63
-                  ],
-                  "elbow": [
-                        -1.183,
-                        0.333,
-                        -2.829
-                  ],
-                  "wrist": [
-                        -0.014,
-                        -0.406,
-                        0.346
-                  ]
-            }
+        "desc": "Right arm rising like sun behind left horizon arm",
+        "leftArm": {
+          "shoulder": [1.050, 0.080, 0.700],
+          "elbow": [-0.020, 0.180, 1.250],
+          "wrist": [-0.400, 0.250, 0.350],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        },
+        "rightArm": {
+          "shoulder": [1.180, 0.250, -0.750],
+          "elbow": [0.100, 0.280, -1.500],
+          "wrist": [-0.300, -0.200, -0.150],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        }
       },
       "YES": {
-            "shoulder": [
-                  -0.329,
-                  0.05,
-                  -0.082
-            ],
-            "elbow": [
-                  -1.758,
-                  0.205,
-                  -0.297
-            ],
-            "wrist": [
-                  0.393,
-                  -0.177,
-                  0.312
-            ]
+        "desc": "Right fist nodding up and down affirmatively",
+        "rightArm": {
+          "shoulder": [1.120, 0.280, -0.780],
+          "elbow": [-0.050, 0.220, -1.250],
+          "wrist": [-0.280, -0.120, -0.050],
+          "fingerCurl": [0.85, 0.85, 0.85, 0.85, 0.85]
+        }
       },
       "NO": {
-            "shoulder": [
-                  -3.865,
-                  1.155,
-                  -2.848
-            ],
-            "elbow": [
-                  -0.861,
-                  -0.235,
-                  -2.176
-            ],
-            "wrist": [
-                  -0.345,
-                  -0.884,
-                  -0.092
-            ]
+        "desc": "Right fingers snapping closed in polite refusal",
+        "rightArm": {
+          "shoulder": [1.100, 0.300, -0.760],
+          "elbow": [-0.060, 0.240, -1.220],
+          "wrist": [-0.260, -0.140, -0.040],
+          "fingerCurl": [0.50, 0.50, 0.50, 0.85, 0.85]
+        }
       },
       "INDIA": {
-            "shoulder": [
-                  -0.719,
-                  0.13,
-                  -0.462
-            ],
-            "elbow": [
-                  -1.963,
-                  0.347,
-                  -0.716
-            ],
-            "wrist": [
-                  0.912,
-                  -0.259,
-                  0.719
-            ]
+        "desc": "Right thumb touching forehead center bindi spot",
+        "rightArm": {
+          "shoulder": [1.280, 0.380, -0.850],
+          "elbow": [0.180, 0.350, -1.650],
+          "wrist": [-0.280, -0.250, -0.220],
+          "fingerCurl": [0.0, 0.85, 0.85, 0.85, 0.85]
+        }
       },
       "NICE": {
-            "left": {
-                  "shoulder": [
-                        -0.258,
-                        0.027,
-                        0.107
-                  ],
-                  "elbow": [
-                        -1.365,
-                        -0.409,
-                        0.673
-                  ],
-                  "wrist": [
-                        0.321,
-                        0.36,
-                        -0.135
-                  ]
-            },
-            "right_start": {
-                  "shoulder": [
-                        -0.565,
-                        -0.815,
-                        -0.441
-                  ],
-                  "elbow": [
-                        -4.066,
-                        -1.658,
-                        3.799
-                  ],
-                  "wrist": [
-                        1.327,
-                        -1.967,
-                        0.266
-                  ]
-            },
-            "right_end": {
-                  "shoulder": [
-                        -0.557,
-                        1.987,
-                        0.004
-                  ],
-                  "elbow": [
-                        -3.168,
-                        -2.049,
-                        1.683
-                  ],
-                  "wrist": [
-                        3.848,
-                        1.106,
-                        1.684
-                  ]
-            }
+        "desc": "Right flat palm smoothly gliding across left palm",
+        "leftArm": {
+          "shoulder": [1.050, 0.080, 0.700],
+          "elbow": [-0.020, 0.180, 1.250],
+          "wrist": [-0.400, 0.250, 0.350],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        },
+        "rightArm": {
+          "shoulder": [1.080, -0.060, -0.720],
+          "elbow": [0.000, -0.160, -1.220],
+          "wrist": [-0.380, -0.240, -0.380],
+          "fingerCurl": [0.0, 0.0, 0.0, 0.0, 0.0]
+        }
       },
       "MEET": {
-            "right": {
-                  "shoulder": [
-                        -0.377,
-                        -0.15,
-                        -0.23
-                  ],
-                  "elbow": [
-                        -1.697,
-                        0.074,
-                        -0.359
-                  ],
-                  "wrist": [
-                        -0.682,
-                        -2.086,
-                        -0.266
-                  ]
-            },
-            "left": {
-                  "shoulder": [
-                        -0.374,
-                        0.149,
-                        0.228
-                  ],
-                  "elbow": [
-                        -1.698,
-                        -0.077,
-                        0.361
-                  ],
-                  "wrist": [
-                        -0.683,
-                        2.088,
-                        0.267
-                  ]
-            }
+        "desc": "Both upright index fingers moving together until they meet in center",
+        "leftArm": {
+          "shoulder": [1.140, 0.100, 0.850],
+          "elbow": [-0.050, 0.240, 1.600],
+          "wrist": [-0.750, 0.400, 0.520],
+          "fingerCurl": [0.70, 0.0, 0.85, 0.85, 0.85]
+        },
+        "rightArm": {
+          "shoulder": [1.140, -0.100, -0.850],
+          "elbow": [-0.050, -0.240, -1.600],
+          "wrist": [-0.750, -0.400, -0.520],
+          "fingerCurl": [0.70, 0.0, 0.85, 0.85, 0.85]
+        }
       }
-};
+    };
 
-    // Professional Idle Posture: Hands clasped elegantly over lower abdomen (Matching reference model)
     function getRestingPose() {
+      // Poised, calm & sweet professional posture (hands gently clasped over lower waist, warm friendly smile)
       return {
         head: [0, 0, 0],
         browY: 0,
         mouthOpen: 0,
-        smile: 0.18,
+        smile: 0.38,
         bodyShiftZ: 0,
         bodyLeanX: 0,
         leftArm: {
-          shoulder: [0, 0, 0],
-          elbow: [0, 0, 0],
-          wrist: [0, 0, 0],
-          fingerCurl: [0.15, 0.15, 0.15, 0.15, 0.15]
+          shoulder: [1.207, -0.226, 1.280],
+          elbow: [0.095, 0.596, 0.052],
+          wrist: [0.026, -0.082, 0.374],
+          fingerCurl: [0.25, 0.22, 0.22, 0.22, 0.22]
         },
         rightArm: {
-          shoulder: [0, 0, 0],
-          elbow: [0, 0, 0],
-          wrist: [0, 0, 0],
-          fingerCurl: [0.15, 0.15, 0.15, 0.15, 0.15]
+          shoulder: [1.207, 0.226, -1.280],
+          elbow: [0.095, -0.596, -0.052],
+          wrist: [0.026, 0.082, -0.374],
+          fingerCurl: [0.25, 0.22, 0.22, 0.22, 0.22]
         }
       };
     }
@@ -1988,29 +1555,14 @@
       const foreArmBone = bones[prefix + 'ForeArm'];
       const handBone = bones[prefix + 'Hand'];
 
-      if (armBone && armBone.userData && armBone.userData.initialRotation) {
-        const init = armBone.userData.initialRotation;
-        armBone.rotation.set(
-          init.x + (armPose.shoulder ? armPose.shoulder[0] : 0),
-          init.y + (armPose.shoulder ? armPose.shoulder[1] : 0),
-          init.z + (armPose.shoulder ? armPose.shoulder[2] : 0)
-        );
+      if (armBone && armPose.shoulder) {
+        armBone.rotation.set(armPose.shoulder[0], armPose.shoulder[1], armPose.shoulder[2]);
       }
-      if (foreArmBone && foreArmBone.userData && foreArmBone.userData.initialRotation) {
-        const init = foreArmBone.userData.initialRotation;
-        foreArmBone.rotation.set(
-          init.x + (armPose.elbow ? armPose.elbow[0] : 0),
-          init.y + (armPose.elbow ? armPose.elbow[1] : 0),
-          init.z + (armPose.elbow ? armPose.elbow[2] : 0)
-        );
+      if (foreArmBone && armPose.elbow) {
+        foreArmBone.rotation.set(armPose.elbow[0], armPose.elbow[1], armPose.elbow[2]);
       }
-      if (handBone && handBone.userData && handBone.userData.initialRotation) {
-        const init = handBone.userData.initialRotation;
-        handBone.rotation.set(
-          init.x + (armPose.wrist ? armPose.wrist[0] : 0),
-          init.y + (armPose.wrist ? armPose.wrist[1] : 0),
-          init.z + (armPose.wrist ? armPose.wrist[2] : 0)
-        );
+      if (handBone && armPose.wrist) {
+        handBone.rotation.set(armPose.wrist[0], armPose.wrist[1], armPose.wrist[2]);
       }
 
       if (armPose.fingerCurl) {
@@ -2039,11 +1591,15 @@
         );
       }
 
-      // Dynamic blendshape expressions (Smile / mouthing / brows)
-      const smileVal = pose.smile !== undefined ? pose.smile : 0.18;
+      // Dynamic calm, sweet, radiant female expressions (gentle smile, warm eyes, serene brows)
+      const smileVal = pose.smile !== undefined ? Math.max(pose.smile, 0.35) : 0.38;
       setMorph('mouthSmile', smileVal);
-      setMorph('mouthSmileLeft', smileVal * 0.9);
-      setMorph('mouthSmileRight', smileVal * 0.9);
+      setMorph('mouthSmileLeft', smileVal);
+      setMorph('mouthSmileRight', smileVal);
+      setMorph('cheekSquintLeft', smileVal * 0.65);
+      setMorph('cheekSquintRight', smileVal * 0.65);
+      setMorph('eyeSquintLeft', smileVal * 0.22);
+      setMorph('eyeSquintRight', smileVal * 0.22);
 
       const mouthOpenVal = pose.mouthOpen || 0.0;
       setMorph('jawOpen', mouthOpenVal);
@@ -2051,7 +1607,7 @@
 
       const browVal = pose.browY || 0.0;
       if (browVal > 0) {
-        setMorph('browInnerUp', Math.min(1.0, browVal * 12));
+        setMorph('browInnerUp', Math.min(1.0, 0.16 + browVal * 10));
         setMorph('browOuterUpLeft', Math.min(1.0, browVal * 8));
         setMorph('browOuterUpRight', Math.min(1.0, browVal * 8));
         setMorph('browDownLeft', 0);
@@ -2060,14 +1616,14 @@
         setMorph('browDownLeft', Math.min(1.0, -browVal * 14));
         setMorph('browDownRight', Math.min(1.0, -browVal * 14));
         setMorph('browInnerUp', 0);
-        setMorph('browOuterUpLeft', 0);
-        setMorph('browOuterUpRight', 0);
       } else {
-        setMorph('browInnerUp', 0);
+        // Serene, gentle welcoming resting eyebrows
+        setMorph('browInnerUp', 0.14);
+        setMorph('browOuterUpLeft', 0.05);
+        setMorph('browOuterUpRight', 0.05);
         setMorph('browDownLeft', 0);
         setMorph('browDownRight', 0);
       }
-
       // Left & Right Arm Articulations
       applyArmRotations(true, pose.leftArm);
       applyArmRotations(false, pose.rightArm);
