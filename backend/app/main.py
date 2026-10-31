@@ -43,6 +43,13 @@ if DIST_DIR.exists():
 if PUBLIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(PUBLIC_DIR)), name="static")
 
+@app.get("/avatar.glb")
+async def serve_avatar_glb():
+    glb_path = PUBLIC_DIR / "avatar.glb"
+    if glb_path.exists():
+        return FileResponse(glb_path, media_type="model/gltf-binary")
+    return HTMLResponse("Not Found", status_code=404)
+
 @app.get("/", response_class=HTMLResponse)
 async def serve_index(request: Request):
     """
