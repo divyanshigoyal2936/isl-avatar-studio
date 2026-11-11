@@ -1,5 +1,10 @@
 # RAG-Augmented Speech-to-Indian Sign Language (ISL) Human Avatar Generator
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://isl-avatar-studio.onrender.com)
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Three.js](https://img.shields.io/badge/Three.js-black?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org/)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+
 An accessible web application where users can speak or type in an Indian language (Hindi, English, Tamil, Telugu, Bengali, Marathi, Gujarati, etc.) and receive visual Indian Sign Language (ISL) explanations performed by a realistic 3D human avatar.
 
 ---
