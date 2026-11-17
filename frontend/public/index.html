@@ -401,6 +401,15 @@
     </div>
   </div>
 
+  <!-- DEBUG PANEL (shows gloss pipeline output) -->
+  <div id="debugPanel" class="hidden fixed bottom-20 right-4 z-50 w-80 glass-panel rounded-xl border border-slate-700 p-3 text-xs font-mono text-slate-300 max-h-48 overflow-y-auto shadow-2xl">
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-amber-400 font-bold">🔍 Gloss Debug</span>
+      <button onclick="document.getElementById('debugPanel').classList.add('hidden')" class="text-slate-500 hover:text-white">✕</button>
+    </div>
+    <pre id="debugLog" class="whitespace-pre-wrap text-[10px] leading-relaxed"></pre>
+  </div>
+
   <!-- APPLICATION JAVASCRIPT LOGIC -->
   <script>
     // --- STATE MANAGEMENT ---
@@ -622,6 +631,18 @@
         avatarRig.isReady = true;
         if (signLabel) signLabel.textContent = "READY";
 
+        // Log discovered bones for debugging
+        const boneNames = Object.keys(avatarRig.bones);
+        console.log('[ISL Avatar] Discovered bones:', boneNames.join(', '));
+
+        // Auto-remap bones: handle mixamorig prefix (common in Mixamo/Avaturn models)
+        boneNames.forEach(name => {
+          const stripped = name.replace(/^mixamorig[:\s]?/i, '');
+          if (stripped !== name && !avatarRig.bones[stripped]) {
+            avatarRig.bones[stripped] = avatarRig.bones[name];
+          }
+        });
+
         // Apply natural resting pose immediately
         applyPoseToAvatar(getRestingPose());
       }
@@ -644,31 +665,39 @@
     const REST_R = {"shoulder":[0.3, 0.12, -0.55],"elbow":[0.1, -0.3, -0.1],"wrist":[0.05, 0.05, -0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]};
 
     const COMPUTED_POSES = {
-      "HELLO":{"leftArm":{"shoulder":[1.154,0.099,0.901],"elbow":[-0.057,0.255,1.732],"wrist":[-0.828,0.05,0],"fingerCurl":[0,0,0,0,0]},"rightArm":{"shoulder":[1.154,-0.099,-0.901],"elbow":[-0.057,-0.255,-1.732],"wrist":[-0.828,0.05,0],"fingerCurl":[0,0,0,0,0]}},
-      "YOU":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.65, 0.35, -0.55],"elbow":[-0.4, -0.05, -1.05],"wrist":[-0.18, -0.12, -0.08],"fingerCurl":[0.7, 0.0, 0.9, 0.9, 0.9]}},
-      "HOW":{"leftArm":{"shoulder":[0.5, -0.1, 0.5],"elbow":[0.05, 0.15, 1.2],"wrist":[-0.15, 0.2, 0.3],"fingerCurl":[0.2, 0.2, 0.2, 0.2, 0.2]},"rightArm":{"shoulder":[0.5, 0.1, -0.5],"elbow":[0.05, -0.15, -1.2],"wrist":[-0.15, -0.2, -0.3],"fingerCurl":[0.2, 0.2, 0.2, 0.2, 0.2]}},
-      "THANK_YOU_START":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.8, 0.28, -0.65],"elbow":[0.25, 0.2, -1.45],"wrist":[-0.22, -0.18, -0.15],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]}},
-      "THANK_YOU_END":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.62, 0.25, -0.6],"elbow":[-0.12, 0.22, -1.1],"wrist":[-0.28, -0.14, -0.08],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]}},
-      "WELCOME":{"leftArm":{"shoulder":[0.45, -0.18, 0.35],"elbow":[0.05, 0.1, 0.8],"wrist":[-0.1, 0.18, 0.25],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]},"rightArm":{"shoulder":[0.45, 0.18, -0.35],"elbow":[0.05, -0.1, -0.8],"wrist":[-0.1, -0.18, -0.25],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]}},
-      "PLEASE":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.7, 0.22, -0.58],"elbow":[0.18, 0.18, -1.35],"wrist":[-0.2, -0.15, -0.12],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]}},
-      "NAME":{"leftArm":{"shoulder":[0.45, -0.05, 0.55],"elbow":[0.02, 0.1, 1.1],"wrist":[-0.35, 0.22, 0.4],"fingerCurl":[0.1, 0.1, 0.1, 0.1, 0.1]},"rightArm":{"shoulder":[0.62, 0.18, -0.62],"elbow":[-0.05, 0.15, -1.28],"wrist":[-0.25, -0.12, -0.1],"fingerCurl":[0.8, 0.0, 0.0, 0.85, 0.85]}},
-      "WHAT":{"leftArm":{"shoulder":[0.38, -0.06, 0.42],"elbow":[0.05, 0.12, 0.95],"wrist":[-0.08, 0.15, 0.22],"fingerCurl":[0.08, 0.08, 0.08, 0.08, 0.08]},"rightArm":{"shoulder":[0.38, 0.06, -0.42],"elbow":[0.05, -0.12, -0.95],"wrist":[-0.08, -0.15, -0.22],"fingerCurl":[0.08, 0.08, 0.08, 0.08, 0.08]}},
-      "WHERE":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.68, 0.28, -0.6],"elbow":[-0.08, 0.18, -1.22],"wrist":[-0.22, -0.1, -0.05],"fingerCurl":[0.8, 0.0, 0.9, 0.9, 0.9]}},
-      "ME":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.78, 0.48, 0.38],"elbow":[1.25, -0.2, 0.35],"wrist":[0.18, -0.4, 1.55],"fingerCurl":[0.7, 0.0, 0.9, 0.9, 0.9]}},
-      "HELP":{"leftArm":{"shoulder":[0.48, -0.08, 0.5],"elbow":[0.02, 0.12, 1.05],"wrist":[-0.28, 0.2, 0.38],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]},"rightArm":{"shoulder":[0.52, 0.08, -0.52],"elbow":[0.05, -0.12, -1.08],"wrist":[-0.3, -0.2, -0.38],"fingerCurl":[0.0, 0.85, 0.85, 0.85, 0.85]}},
-      "WATER":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.85, 0.32, -0.7],"elbow":[0.18, 0.25, -1.52],"wrist":[-0.2, -0.22, -0.16],"fingerCurl":[0.8, 0.0, 0.0, 0.0, 0.9]}},
-      "FOOD":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.88, 0.35, -0.72],"elbow":[0.22, 0.28, -1.58],"wrist":[-0.22, -0.24, -0.18],"fingerCurl":[0.6, 0.6, 0.6, 0.6, 0.6]}},
-      "HOSPITAL":{"leftArm":{"shoulder":[0.38, -0.02, 0.22],"elbow":[0.02, -0.02, 0.44],"wrist":[0.04, -0.18, -0.08],"fingerCurl":[0.15, 0.15, 0.15, 0.15, 0.15]},"rightArm":{"shoulder":[0.65, 0.28, -0.58],"elbow":[0.05, 0.22, -1.42],"wrist":[-0.32, -0.18, -0.2],"fingerCurl":[0.75, 0.0, 0.0, 0.75, 0.75]}},
-      "DOCTOR":{"leftArm":{"shoulder":[0.45, -0.05, 0.52],"elbow":[0.02, 0.1, 1.08],"wrist":[-0.38, 0.22, 0.42],"fingerCurl":[0.15, 0.15, 0.15, 0.15, 0.15]},"rightArm":{"shoulder":[0.6, 0.16, -0.6],"elbow":[-0.04, 0.14, -1.25],"wrist":[-0.28, -0.12, -0.09],"fingerCurl":[0.75, 0.0, 0.0, 0.75, 0.75]}},
-      "TIME":{"leftArm":{"shoulder":[0.45, -0.05, 0.52],"elbow":[0.02, 0.1, 1.08],"wrist":[-0.38, 0.22, 0.42],"fingerCurl":[0.88, 0.88, 0.88, 0.88, 0.88]},"rightArm":{"shoulder":[0.62, 0.18, -0.62],"elbow":[-0.05, 0.15, -1.28],"wrist":[-0.25, -0.12, -0.1],"fingerCurl":[0.75, 0.0, 0.9, 0.9, 0.9]}},
-      "TODAY":{"leftArm":{"shoulder":[0.42, -0.08, 0.45],"elbow":[0.05, 0.12, 0.9],"wrist":[-0.1, 0.18, 0.28],"fingerCurl":[0.0, 0.72, 0.72, 0.72, 0.0]},"rightArm":{"shoulder":[0.42, 0.08, -0.45],"elbow":[0.05, -0.12, -0.9],"wrist":[-0.1, -0.18, -0.28],"fingerCurl":[0.0, 0.72, 0.72, 0.72, 0.0]}},
-      "GOOD":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.65, 0.32, -0.55],"elbow":[-0.4, -0.05, -1.05],"wrist":[-0.18, -0.12, -0.08],"fingerCurl":[0.0, 0.9, 0.9, 0.9, 0.9]}},
-      "MORNING":{"leftArm":{"shoulder":[0.45, -0.1, 0.5],"elbow":[0.02, 0.12, 1.05],"wrist":[-0.3, 0.2, 0.35],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]},"rightArm":{"shoulder":[0.72, 0.22, -0.62],"elbow":[0.12, 0.25, -1.48],"wrist":[-0.25, -0.18, -0.14],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]}},
-      "YES":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.65, 0.26, -0.58],"elbow":[-0.05, 0.2, -1.22],"wrist":[-0.22, -0.12, -0.05],"fingerCurl":[0.85, 0.85, 0.85, 0.85, 0.85]}},
-      "NO":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.62, 0.28, -0.56],"elbow":[-0.06, 0.22, -1.18],"wrist":[-0.2, -0.12, -0.04],"fingerCurl":[0.55, 0.55, 0.55, 0.9, 0.9]}},
-      "INDIA":{"leftArm":{"shoulder":[0.3, -0.12, 0.55],"elbow":[0.1, 0.3, 0.1],"wrist":[0.05, -0.05, 0.2],"fingerCurl":[0.18, 0.18, 0.18, 0.18, 0.18]},"rightArm":{"shoulder":[0.9, 0.32, -0.72],"elbow":[0.22, 0.3, -1.62],"wrist":[-0.22, -0.24, -0.2],"fingerCurl":[0.0, 0.9, 0.9, 0.9, 0.9]}},
-      "NICE":{"leftArm":{"shoulder":[0.48, -0.08, 0.5],"elbow":[0.02, 0.12, 1.05],"wrist":[-0.28, 0.2, 0.38],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]},"rightArm":{"shoulder":[0.55, 0.1, -0.58],"elbow":[0.02, -0.14, -1.18],"wrist":[-0.32, -0.22, -0.36],"fingerCurl":[0.0, 0.0, 0.0, 0.0, 0.0]}},
-      "MEET":{"leftArm":{"shoulder":[0.58, -0.08, 0.68],"elbow":[-0.05, 0.22, 1.55],"wrist":[-0.62, 0.38, 0.5],"fingerCurl":[0.75, 0.0, 0.9, 0.9, 0.9]},"rightArm":{"shoulder":[0.58, 0.08, -0.68],"elbow":[-0.05, -0.22, -1.55],"wrist":[-0.62, -0.38, -0.5],"fingerCurl":[0.75, 0.0, 0.9, 0.9, 0.9]}}
+      // HELLO / NAMASTE — both palms flat together at chest, fingers pointing up
+      "HELLO":{"leftArm":{"shoulder":[1.05,0.08,0.75],"elbow":[-0.05,0.20,1.55],"wrist":[-0.78,0.05,0.08],"fingerCurl":[0,0,0,0,0]},"rightArm":{"shoulder":[1.05,-0.08,-0.75],"elbow":[-0.05,-0.20,-1.55],"wrist":[-0.78,0.05,-0.08],"fingerCurl":[0,0,0,0,0]}},
+      // YOU — right index finger pointing forward
+      "YOU":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.65,0.35,-0.55],"elbow":[-0.4,-0.05,-1.05],"wrist":[-0.18,-0.12,-0.08],"fingerCurl":[0.7,0.0,0.9,0.9,0.9]}},
+      // HOW — both hands cupped and rotating up
+      "HOW":{"leftArm":{"shoulder":[0.5,-0.1,0.5],"elbow":[0.05,0.15,1.2],"wrist":[-0.15,0.2,0.3],"fingerCurl":[0.2,0.2,0.2,0.2,0.2]},"rightArm":{"shoulder":[0.5,0.1,-0.5],"elbow":[0.05,-0.15,-1.2],"wrist":[-0.15,-0.2,-0.3],"fingerCurl":[0.2,0.2,0.2,0.2,0.2]}},
+      "THANK_YOU_START":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.8,0.28,-0.65],"elbow":[0.25,0.2,-1.45],"wrist":[-0.22,-0.18,-0.15],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]}},
+      "THANK_YOU_END":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.62,0.25,-0.6],"elbow":[-0.12,0.22,-1.1],"wrist":[-0.28,-0.14,-0.08],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]}},
+      "WELCOME":{"leftArm":{"shoulder":[0.45,-0.18,0.35],"elbow":[0.05,0.1,0.8],"wrist":[-0.1,0.18,0.25],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]},"rightArm":{"shoulder":[0.45,0.18,-0.35],"elbow":[0.05,-0.1,-0.8],"wrist":[-0.1,-0.18,-0.25],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]}},
+      "PLEASE":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.7,0.22,-0.58],"elbow":[0.18,0.18,-1.35],"wrist":[-0.2,-0.15,-0.12],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]}},
+      "NAME":{"leftArm":{"shoulder":[0.45,-0.05,0.55],"elbow":[0.02,0.1,1.1],"wrist":[-0.35,0.22,0.4],"fingerCurl":[0.1,0.1,0.1,0.1,0.1]},"rightArm":{"shoulder":[0.62,0.18,-0.62],"elbow":[-0.05,0.15,-1.28],"wrist":[-0.25,-0.12,-0.1],"fingerCurl":[0.8,0.0,0.0,0.85,0.85]}},
+      // WHAT — both hands palm-up shrug
+      "WHAT":{"leftArm":{"shoulder":[0.38,-0.06,0.42],"elbow":[0.05,0.12,0.95],"wrist":[-0.08,0.15,0.22],"fingerCurl":[0.08,0.08,0.08,0.08,0.08]},"rightArm":{"shoulder":[0.38,0.06,-0.42],"elbow":[0.05,-0.12,-0.95],"wrist":[-0.08,-0.15,-0.22],"fingerCurl":[0.08,0.08,0.08,0.08,0.08]}},
+      // WHERE — right index finger wagging side-to-side
+      "WHERE":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.72,0.30,-0.62],"elbow":[-0.10,0.20,-1.28],"wrist":[-0.25,-0.12,-0.06],"fingerCurl":[0.80,0.0,0.90,0.90,0.90]}},
+      "ME":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.78,0.48,0.38],"elbow":[1.25,-0.2,0.35],"wrist":[0.18,-0.4,1.55],"fingerCurl":[0.7,0.0,0.9,0.9,0.9]}},
+      "HELP":{"leftArm":{"shoulder":[0.48,-0.08,0.5],"elbow":[0.02,0.12,1.05],"wrist":[-0.28,0.2,0.38],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]},"rightArm":{"shoulder":[0.52,0.08,-0.52],"elbow":[0.05,-0.12,-1.08],"wrist":[-0.3,-0.2,-0.38],"fingerCurl":[0.0,0.85,0.85,0.85,0.85]}},
+      "WATER":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.85,0.32,-0.7],"elbow":[0.18,0.25,-1.52],"wrist":[-0.2,-0.22,-0.16],"fingerCurl":[0.8,0.0,0.0,0.0,0.9]}},
+      "FOOD":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.88,0.35,-0.72],"elbow":[0.22,0.28,-1.58],"wrist":[-0.22,-0.24,-0.18],"fingerCurl":[0.6,0.6,0.6,0.6,0.6]}},
+      // HOSPITAL — right hand draws a + cross on left upper arm
+      "HOSPITAL":{"leftArm":{"shoulder":[0.42,-0.04,0.28],"elbow":[0.04,0.0,0.52],"wrist":[0.06,-0.20,-0.10],"fingerCurl":[0.15,0.15,0.15,0.15,0.15]},"rightArm":{"shoulder":[0.68,0.30,-0.60],"elbow":[0.08,0.24,-1.45],"wrist":[-0.35,-0.20,-0.22],"fingerCurl":[0.75,0.0,0.0,0.75,0.75]}},
+      "DOCTOR":{"leftArm":{"shoulder":[0.45,-0.05,0.52],"elbow":[0.02,0.1,1.08],"wrist":[-0.38,0.22,0.42],"fingerCurl":[0.15,0.15,0.15,0.15,0.15]},"rightArm":{"shoulder":[0.6,0.16,-0.6],"elbow":[-0.04,0.14,-1.25],"wrist":[-0.28,-0.12,-0.09],"fingerCurl":[0.75,0.0,0.0,0.75,0.75]}},
+      "TIME":{"leftArm":{"shoulder":[0.45,-0.05,0.52],"elbow":[0.02,0.1,1.08],"wrist":[-0.38,0.22,0.42],"fingerCurl":[0.88,0.88,0.88,0.88,0.88]},"rightArm":{"shoulder":[0.62,0.18,-0.62],"elbow":[-0.05,0.15,-1.28],"wrist":[-0.25,-0.12,-0.1],"fingerCurl":[0.75,0.0,0.9,0.9,0.9]}},
+      "TODAY":{"leftArm":{"shoulder":[0.42,-0.08,0.45],"elbow":[0.05,0.12,0.9],"wrist":[-0.1,0.18,0.28],"fingerCurl":[0.0,0.72,0.72,0.72,0.0]},"rightArm":{"shoulder":[0.42,0.08,-0.45],"elbow":[0.05,-0.12,-0.9],"wrist":[-0.1,-0.18,-0.28],"fingerCurl":[0.0,0.72,0.72,0.72,0.0]}},
+      "GOOD":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.65,0.32,-0.55],"elbow":[-0.4,-0.05,-1.05],"wrist":[-0.18,-0.12,-0.08],"fingerCurl":[0.0,0.9,0.9,0.9,0.9]}},
+      "MORNING":{"leftArm":{"shoulder":[0.45,-0.1,0.5],"elbow":[0.02,0.12,1.05],"wrist":[-0.3,0.2,0.35],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]},"rightArm":{"shoulder":[0.72,0.22,-0.62],"elbow":[0.12,0.25,-1.48],"wrist":[-0.25,-0.18,-0.14],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]}},
+      "YES":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.65,0.26,-0.58],"elbow":[-0.05,0.2,-1.22],"wrist":[-0.22,-0.12,-0.05],"fingerCurl":[0.85,0.85,0.85,0.85,0.85]}},
+      "NO":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.62,0.28,-0.56],"elbow":[-0.06,0.22,-1.18],"wrist":[-0.2,-0.12,-0.04],"fingerCurl":[0.55,0.55,0.55,0.9,0.9]}},
+      "INDIA":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.9,0.32,-0.72],"elbow":[0.22,0.3,-1.62],"wrist":[-0.22,-0.24,-0.2],"fingerCurl":[0.0,0.9,0.9,0.9,0.9]}},
+      "NICE":{"leftArm":{"shoulder":[0.48,-0.08,0.5],"elbow":[0.02,0.12,1.05],"wrist":[-0.28,0.2,0.38],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]},"rightArm":{"shoulder":[0.55,0.1,-0.58],"elbow":[0.02,-0.14,-1.18],"wrist":[-0.32,-0.22,-0.36],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]}},
+      "MEET":{"leftArm":{"shoulder":[0.58,-0.08,0.68],"elbow":[-0.05,0.22,1.55],"wrist":[-0.62,0.38,0.5],"fingerCurl":[0.75,0.0,0.9,0.9,0.9]},"rightArm":{"shoulder":[0.58,0.08,-0.68],"elbow":[-0.05,-0.22,-1.55],"wrist":[-0.62,-0.38,-0.5],"fingerCurl":[0.75,0.0,0.9,0.9,0.9]}},
+      // IS — right hand flat horizontal palm-down, slight dip
+      "IS":{"leftArm":{"shoulder":[0.3,-0.12,0.55],"elbow":[0.1,0.3,0.1],"wrist":[0.05,-0.05,0.2],"fingerCurl":[0.18,0.18,0.18,0.18,0.18]},"rightArm":{"shoulder":[0.55,0.20,-0.50],"elbow":[-0.15,0.0,-1.00],"wrist":[-0.10,-0.08,-0.05],"fingerCurl":[0.0,0.0,0.0,0.0,0.0]}}
     };
 
     function getPoseForSign(token, progress) {
@@ -683,18 +712,46 @@
         return a;
       }
 
-      // 1. HELLO / NAMASTE
+      // 1. HELLO / NAMASTE — both palms touching at chest, respectful head bow
       if (norm === "HELLO" || norm === "NAMASTE" || norm === "GREETINGS" || norm === "HI") {
-        const nod = Math.sin(progress * Math.PI) * 0.12;
+        const nod = Math.sin(progress * Math.PI) * 0.14;
+        const L = C.HELLO.leftArm;
+        const R = C.HELLO.rightArm;
         return {
-          head: [nod * 0.6, 0, 0],
+          head: [nod * 0.7, 0, 0],
           browY: 0.015,
           mouthOpen: 0.02,
           smile: 0.90,
           bodyShiftZ: 0,
           bodyLeanX: 0.01,
-          leftArm: C.HELLO.leftArm,
-          rightArm: C.HELLO.rightArm
+          leftArm: {
+            shoulder: [L.shoulder[0], L.shoulder[1] + Math.sin(progress*Math.PI)*0.02, L.shoulder[2]],
+            elbow: L.elbow, wrist: L.wrist, fingerCurl: [0,0,0,0,0]
+          },
+          rightArm: {
+            shoulder: [R.shoulder[0], R.shoulder[1] - Math.sin(progress*Math.PI)*0.02, R.shoulder[2]],
+            elbow: R.elbow, wrist: R.wrist, fingerCurl: [0,0,0,0,0]
+          }
+        };
+      }
+
+      // IS — right hand flat palm-down small downward dip
+      if (norm === "IS" || norm === "ARE" || norm === "WAS") {
+        const dip = Math.sin(progress * Math.PI) * 0.04;
+        return {
+          head: [0.03, 0, 0],
+          browY: 0.01,
+          mouthOpen: 0.02,
+          smile: 0.30,
+          bodyShiftZ: 0,
+          bodyLeanX: 0,
+          leftArm: REST_L,
+          rightArm: {
+            shoulder: [0.55, 0.20, -0.50],
+            elbow: [-0.15, 0.0, -1.00],
+            wrist: [-0.10 + dip, -0.08, -0.05],
+            fingerCurl: [0.0, 0.0, 0.0, 0.0, 0.0]
+          }
         };
       }
 
@@ -727,7 +784,7 @@
       }
 
       // 4. THANK-YOU
-      if (norm === "THANK-YOU" || norm === "THANKS" || norm === "DHANYAWAD" || norm === "SHUKRIYA") {
+      if (norm === "THANK-YOU" || norm === "THANK_YOU" || norm === "THANKS" || norm === "DHANYAWAD" || norm === "SHUKRIYA") {
         const t = Math.max(0, Math.min(1, progress));
         const s = C.THANK_YOU_START.rightArm;
         const e = C.THANK_YOU_END.rightArm;
@@ -1233,9 +1290,25 @@
       if (!avatarRig.bones || !armPose) return;
       const bones = avatarRig.bones;
       const prefix = isLeft ? 'Left' : 'Right';
-      const armBone = bones[prefix + 'Arm'];
-      const foreArmBone = bones[prefix + 'ForeArm'];
-      const handBone = bones[prefix + 'Hand'];
+
+      // Try multiple bone naming conventions (Mixamo, Avaturn, ReadyPlayerMe, Blender)
+      const armBone = bones[prefix + 'Arm']
+        || bones[prefix + 'UpperArm']
+        || bones[prefix.toLowerCase() + 'Arm']
+        || bones['mixamorig' + prefix + 'Arm']
+        || bones['mixamorig:' + prefix + 'Arm'];
+
+      const foreArmBone = bones[prefix + 'ForeArm']
+        || bones[prefix + 'Forearm']
+        || bones[prefix + 'LowerArm']
+        || bones[prefix.toLowerCase() + 'ForeArm']
+        || bones['mixamorig' + prefix + 'ForeArm']
+        || bones['mixamorig:' + prefix + 'ForeArm'];
+
+      const handBone = bones[prefix + 'Hand']
+        || bones[prefix.toLowerCase() + 'Hand']
+        || bones['mixamorig' + prefix + 'Hand']
+        || bones['mixamorig:' + prefix + 'Hand'];
 
       if (armBone && armPose.shoulder) {
         armBone.rotation.set(armPose.shoulder[0], armPose.shoulder[1], armPose.shoulder[2]);
@@ -1467,7 +1540,193 @@
       lucide.createIcons();
     }
 
-    // --- PIPELINE TRANSLATION API CALLS ---
+    // ─── LOCAL GLOSS ENGINE (works fully offline, no backend needed) ────────────
+    const INDIAN_LEXICON_LOCAL = {
+      // Hindi
+      "नमस्ते":"HELLO","नमस्कार":"HELLO","प्रणाम":"HELLO",
+      "धन्यवाद":"THANK-YOU","शुक्रिया":"THANK-YOU",
+      "स्वागत":"WELCOME","स्वागतम":"WELCOME",
+      "कृपया":"PLEASE","नाम":"NAME","मेरा":"MY","आपका":"YOUR",
+      "आप":"YOU","मैं":"ME","मुझे":"ME",
+      "क्या":"WHAT","कहाँ":"WHERE","कहा":"WHERE","किधर":"WHERE",
+      "कैसे":"HOW","कब":"WHEN",
+      "पानी":"WATER","जल":"WATER","खाना":"FOOD","भोजन":"FOOD",
+      "मदद":"HELP","सहायता":"HELP",
+      "अस्पताल":"HOSPITAL","डॉक्टर":"DOCTOR","चिकित्सक":"DOCTOR",
+      "समय":"TIME","वक्त":"TIME","आज":"TODAY","सुबह":"MORNING",
+      "अच्छा":"GOOD","हाँ":"YES","जी":"YES","नहीं":"NO",
+      "भारत":"INDIA","मिलना":"MEET",
+      // Tamil
+      "வணக்கம்":"HELLO","நன்றி":"THANK-YOU","தயவுசெய்து":"PLEASE",
+      "பெயர்":"NAME","நீங்கள்":"YOU","நான்":"ME",
+      "என்ன":"WHAT","எங்கே":"WHERE","எப்படி":"HOW",
+      "தண்ணீர்":"WATER","உணவு":"FOOD","உதவி":"HELP",
+      "மருத்துவமனை":"HOSPITAL","மருத்துவர்":"DOCTOR",
+      "இன்று":"TODAY","காலை":"MORNING","நல்ல":"GOOD","இல்லை":"NO",
+      // Telugu
+      "నమస్కారం":"HELLO","ధన్యవాదాలు":"THANK-YOU","దయచేసి":"PLEASE",
+      "పేరు":"NAME","మీరు":"YOU","నేను":"ME",
+      "ఏమిటి":"WHAT","ఎక్కడ":"WHERE","ఎలా":"HOW",
+      "నీరు":"WATER","భోజనం":"FOOD","సహాయం":"HELP",
+      "ఆసుపత్రి":"HOSPITAL","వైద్యుడు":"DOCTOR",
+      // Bengali
+      "নমস্কার":"HELLO","ধন্যবাদ":"THANK-YOU","দয়া করে":"PLEASE",
+      "নাম":"NAME","আপনি":"YOU","আমি":"ME",
+      "কী":"WHAT","কোথায়":"WHERE","হাসপাতাল":"HOSPITAL","ডাক্তার":"DOCTOR",
+    };
+
+    const ENGLISH_GLOSS_MAP = {
+      // greetings / phrases
+      "hello":"HELLO","hi":"HELLO","namaste":"HELLO","greetings":"HELLO",
+      "namaskar":"HELLO",
+      "thank":"THANK-YOU","thanks":"THANK-YOU","thank you":"THANK-YOU",
+      "welcome":"WELCOME","please":"PLEASE",
+      // question words
+      "where":"WHERE","what":"WHAT","how":"HOW","when":"TIME","who":"YOU",
+      "which":"WHAT",
+      // people / pronouns
+      "you":"YOU","your":"YOU","i":"ME","me":"ME","my":"ME","myself":"ME",
+      "we":"ME","our":"ME",
+      // verbs
+      "is":"IS","are":"IS","was":"IS",
+      "need":"HELP","want":"HELP","require":"HELP",
+      "eat":"FOOD","eating":"FOOD","drink":"WATER","drinking":"WATER",
+      "meet":"MEET","meeting":"MEET",
+      "help":"HELP","assist":"HELP",
+      // places / things
+      "hospital":"HOSPITAL","aspatal":"HOSPITAL","clinic":"HOSPITAL",
+      "doctor":"DOCTOR","dr":"DOCTOR","physician":"DOCTOR",
+      "water":"WATER","food":"FOOD","meal":"FOOD","lunch":"FOOD",
+      "name":"NAME",
+      // time
+      "today":"TODAY","now":"TODAY","morning":"MORNING","time":"TIME",
+      "good":"GOOD","nice":"NICE","india":"INDIA",
+      "yes":"YES","no":"NO",
+    };
+
+    // Stopwords to skip (not meaningful in ISL)
+    const STOPWORDS = new Set(["a","an","the","in","on","at","of","to","for","by","with","from","this","that","it","its","am","be","do","does","did","has","have","had","will","would","can","could","should","may","might","and","or","but","so","if","then","also","just","very","quite","here","there","go","going","gone","come","coming","came","take","taking","got","get","about","up","out","into","than","like","look","say","said","know","think","see","use"]);
+
+    function localGlossEngine(inputText) {
+      let text = inputText.trim().toLowerCase();
+
+      // Tokenize – split on whitespace and punctuation
+      const rawTokens = text.split(/[\s,.\-?!;:'"()\[\]{}\/]+/).filter(Boolean);
+
+      const glossSequence = [];
+      const usedIdx = new Set();
+
+      // First pass: check Indian-language tokens
+      rawTokens.forEach((tok, i) => {
+        const mapped = INDIAN_LEXICON_LOCAL[tok];
+        if (mapped) {
+          glossSequence.push({ pos: i, gloss: mapped, token: tok });
+          usedIdx.add(i);
+        }
+      });
+
+      // Second pass: English tokens
+      rawTokens.forEach((tok, i) => {
+        if (usedIdx.has(i)) return;
+        const mapped = ENGLISH_GLOSS_MAP[tok];
+        if (mapped && !STOPWORDS.has(tok)) {
+          glossSequence.push({ pos: i, gloss: mapped, token: tok });
+        } else if (!STOPWORDS.has(tok) && tok.length > 2) {
+          // Keep unknown meaningful words (will get default hand movement)
+          glossSequence.push({ pos: i, gloss: tok.toUpperCase(), token: tok });
+        }
+      });
+
+      // Sort by original position to preserve ISL SOV order
+      glossSequence.sort((a, b) => a.pos - b.pos);
+
+      // Deduplicate consecutive identical glosses
+      const deduped = [];
+      glossSequence.forEach(g => {
+        if (deduped.length === 0 || deduped[deduped.length - 1].gloss !== g.gloss) {
+          deduped.push(g);
+        }
+      });
+
+      return deduped;
+    }
+
+    function buildLocalScheduledClips(glossItems) {
+      const KNOWN_SIGNS = new Set([
+        "HELLO","YOU","HOW","THANK-YOU","WELCOME","PLEASE","NAME","WHAT",
+        "WHERE","ME","HELP","WATER","FOOD","HOSPITAL","DOCTOR","TIME",
+        "TODAY","GOOD","MORNING","YES","NO","INDIA","NICE","MEET","IS"
+      ]);
+
+      let currentTime = 300;
+      const clips = [];
+      const supported = [];
+      const unsupported = [];
+
+      glossItems.forEach((g, idx) => {
+        const verified = KNOWN_SIGNS.has(g.gloss);
+        const duration = verified ? 1200 : 900;
+        clips.push({
+          clip_id: `local_${idx}_${g.gloss}`,
+          gloss_token: g.gloss,
+          start_time_ms: currentTime,
+          duration_ms: duration,
+          end_time_ms: currentTime + duration,
+          transition_in_ms: 150,
+          transition_out_ms: 150,
+          hand_dominance: g.gloss === "HELLO" || g.gloss === "WHAT" || g.gloss === "HOW" ? "both" : "dominant_only",
+          hand_shape: "OPEN_FLAT",
+          palm_orientation: "INWARD",
+          signing_space: "CHEST_CENTER",
+          movement_type: "HOLD",
+          non_manual_markers: { eyebrow: "NEUTRAL", head: "NEUTRAL", mouth: "NEUTRAL" },
+          is_verified: verified,
+          joint_targets: null,
+          description: verified ? `ISL sign for ${g.gloss}` : `Sign for '${g.gloss}' — using default hand movement`
+        });
+        currentTime += duration + 100;
+        if (verified) supported.push(g.gloss); else unsupported.push(g.gloss);
+      });
+
+      const total = glossItems.length;
+      const coverage = total > 0 ? Math.round((supported.length / total) * 100) : 0;
+      return { clips, supported, unsupported, coverage, totalDuration: currentTime + 300 };
+    }
+
+    function buildLocalResponse(inputText, glossItems, clipResult) {
+      const glossDetails = glossItems.map(g => ({
+        token: g.gloss,
+        source_token: g.token,
+        syntax_role: "SIGN",
+        is_verified: clipResult.supported.includes(g.gloss),
+        description: `ISL sign: ${g.gloss}`
+      }));
+
+      return {
+        request_id: "local_" + Date.now(),
+        original_input: inputText,
+        detected_language: "en",
+        transcript: inputText,
+        normalized_sentence: glossItems.map(g => g.gloss).join(" "),
+        rag_enabled: false,
+        retrieved_exemplars: [],
+        generated_gloss: glossItems.map(g => g.gloss),
+        gloss_details: glossDetails,
+        supported_gloss_tokens: clipResult.supported,
+        unsupported_gloss_tokens: clipResult.unsupported,
+        animation_coverage_pct: clipResult.coverage,
+        scheduled_clips: clipResult.clips,
+        total_animation_duration_ms: clipResult.totalDuration,
+        explanation: `Local ISL engine: translated "${inputText}" → [${glossItems.map(g=>g.gloss).join(", ")}]`,
+        grammar_notes: ["ISL uses Subject-Object-Verb order", "Question words move to end or use facial expression"],
+        warnings: clipResult.unsupported.length > 0
+          ? [`Signs for [${clipResult.unsupported.join(", ")}] use default hand movement — not certified ISL`]
+          : [],
+        timings: []
+      };
+    }
+
+    // ─── PIPELINE TRANSLATION (tries backend, falls back to local engine) ────────
     async function triggerTranslation(inputText) {
       const text = inputText.trim();
       if (!text) return;
@@ -1476,30 +1735,56 @@
       btn.disabled = true;
       btn.innerHTML = `<span class="animate-spin mr-1">◌</span> Translating...`;
 
+      // Show debug panel
+      const debugPanel = document.getElementById('debugPanel');
+      const debugLog = document.getElementById('debugLog');
+      if (debugPanel) debugPanel.classList.remove('hidden');
+
+      function dbg(msg) {
+        console.log('[ISL]', msg);
+        if (debugLog) debugLog.textContent += '\n' + msg;
+      }
+
+      dbg(`Input: "${text}"`);
+
       try {
         const lang = document.getElementById('languageSelect').value;
-        const useRag = document.getElementById('checkUseRag').checked;
+        const useRag = document.getElementById('checkUseRag') ? document.getElementById('checkUseRag').checked : true;
+
+        dbg('Trying backend API...');
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 4000); // 4-second timeout
 
         const response = await fetch('/api/sign/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            text: text,
-            language: lang,
-            use_rag: useRag,
-            rag_top_k: 3
-          })
+          body: JSON.stringify({ text, language: lang, use_rag: useRag, rag_top_k: 3 }),
+          signal: controller.signal
         });
+        clearTimeout(timeout);
 
-        if (!response.ok) {
-          throw new Error(`API error (${response.status})`);
+        if (!response.ok) throw new Error(`API ${response.status}`);
+        const data = await response.json();
+        dbg(`Backend OK — glosses: [${(data.generated_gloss||[]).join(', ')}]`);
+        renderPipelineResponse(data);
+
+      } catch (err) {
+        dbg(`Backend unavailable (${err.message}) — using LOCAL gloss engine`);
+
+        // ── LOCAL FALLBACK ──
+        const glossItems = localGlossEngine(text);
+        dbg(`Local glosses: [${glossItems.map(g=>g.gloss).join(', ')}]`);
+
+        if (glossItems.length === 0) {
+          dbg('No glosses found — showing NO_SIGN');
+          glossItems.push({ pos: 0, gloss: 'HELP', token: text });
         }
 
-        const data = await response.json();
-        renderPipelineResponse(data);
-      } catch (err) {
-        console.error("Translation error:", err);
-        alert(`Error communicating with ISL translation pipeline: ${err.message}`);
+        const clipResult = buildLocalScheduledClips(glossItems);
+        dbg(`Clips: ${clipResult.clips.length}, Coverage: ${clipResult.coverage}%`);
+
+        const localData = buildLocalResponse(text, glossItems, clipResult);
+        renderPipelineResponse(localData);
       } finally {
         btn.disabled = false;
         btn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i><span>Translate & Sign</span>`;
