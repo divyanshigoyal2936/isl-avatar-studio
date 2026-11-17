@@ -551,6 +551,7 @@
       scene.add(avatarRoot);
       avatarRig.root = avatarRoot;
       avatarRig.bones = {};
+      avatarRig.allNodes = {};
       avatarRig.morphMeshes = [];
       avatarRig.isReady = false;
 
@@ -611,16 +612,91 @@
             }
           }
 
-          if (child.isBone) {
-            avatarRig.bones[child.name] = child;
-            child.userData.initialRotation = child.rotation.clone();
-            child.userData.initialQuaternion = child.quaternion.clone();
-            child.userData.initialPosition = child.position.clone();
-
-            // Avaturn female proportions are already natural & correct
-            // No artificial bone scaling needed
+          // ── ROBUST BONE REGISTRATION ───────────────────────────────────────
+          // Many GLTFs (Avaturn, ReadyPlayerMe, Mixamo) store skeleton joints
+          // as plain Object3D — isBone is false for them. We register EVERY
+          // named node so we can find arms/hands/fingers regardless of format.
+          if (child.name && child.name.length > 0) {
+            avatarRig.allNodes[child.name] = child;
+            const lc = child.name.toLowerCase();
+            if (child.isBone || child.type === 'Bone' ||
+                /arm|forearm|hand|finger|thumb|index|middle|ring|pinky|shoulder|elbow|wrist|spine|neck|head|hip/i.test(child.name)) {
+              avatarRig.bones[child.name] = child;
+              if (!child.userData.initialRotation) {
+                child.userData.initialRotation = child.rotation.clone();
+                child.userData.initialQuaternion = child.quaternion.clone();
+                child.userData.initialPosition = child.position.clone();
+              }
+            }
           }
         });
+
+        // ── STEP 2: also harvest bones from SkinnedMesh skeletons ──────────
+        model.traverse(child => {
+          if (child.isSkinnedMesh && child.skeleton) {
+            child.skeleton.bones.forEach(bone => {
+              if (!avatarRig.bones[bone.name]) {
+                avatarRig.bones[bone.name] = bone;
+                avatarRig.allNodes[bone.name] = bone;
+                if (!bone.userData.initialRotation) {
+                  bone.userData.initialRotation = bone.rotation.clone();
+                  bone.userData.initialQuaternion = bone.quaternion.clone();
+                  bone.userData.initialPosition = bone.position.clone();
+                }
+              }
+            });
+          }
+        });
+
+        // ── STEP 3: build canonical bone refs (try every naming convention) ─
+        const B = avatarRig.bones;
+        const allKeys = Object.keys(B);
+        console.log('[ISL] All registered nodes:', allKeys.join(', '));
+
+        function findBone(...candidates) {
+          for (const name of candidates) {
+            if (B[name]) return B[name];
+            // fuzzy: case-insensitive partial match
+            const lc = name.toLowerCase();
+            for (const k of allKeys) {
+              if (k.toLowerCase() === lc) return B[k];
+            }
+          }
+          return null;
+        }
+
+        // Store canonical refs used by applyArmRotations
+        avatarRig.ref = {
+          LeftArm:     findBone('LeftArm','Left_Arm','mixamorigLeftArm','mixamorig:LeftArm','LeftUpperArm','leftArm','Left arm','Bip001 L UpperArm'),
+          LeftForeArm: findBone('LeftForeArm','Left_ForeArm','mixamorigLeftForeArm','mixamorig:LeftForeArm','LeftLowerArm','leftForeArm','LeftForearm','Bip001 L Forearm'),
+          LeftHand:    findBone('LeftHand','Left_Hand','mixamorigLeftHand','mixamorig:LeftHand','leftHand','Bip001 L Hand'),
+          RightArm:    findBone('RightArm','Right_Arm','mixamorigRightArm','mixamorig:RightArm','RightUpperArm','rightArm','Right arm','Bip001 R UpperArm'),
+          RightForeArm:findBone('RightForeArm','Right_ForeArm','mixamorigRightForeArm','mixamorig:RightForeArm','RightLowerArm','rightForeArm','RightForearm','Bip001 R Forearm'),
+          RightHand:   findBone('RightHand','Right_Hand','mixamorigRightHand','mixamorig:RightHand','rightHand','Bip001 R Hand'),
+          Head:        findBone('Head','mixamorigHead','mixamorig:Head','head'),
+          Neck:        findBone('Neck','mixamorigNeck','mixamorig:Neck','neck'),
+          Spine:       findBone('Spine2','Spine1','Spine','mixamorigSpine2','mixamorig:Spine2','spine'),
+          Hips:        findBone('Hips','mixamorigHips','mixamorig:Hips','hips','Pelvis'),
+        };
+
+        console.log('[ISL] Canonical bone refs:', Object.entries(avatarRig.ref).map(([k,v])=>k+':'+(v?'✓':'✗')).join(', '));
+
+        // Warn if critical arm bones missing
+        if (!avatarRig.ref.LeftArm || !avatarRig.ref.RightArm) {
+          console.warn('[ISL] ⚠️ Arm bones not found! Trying ALL nodes as fallback…');
+          // Last resort: search all allNodes for anything arm-shaped
+          Object.keys(avatarRig.allNodes).forEach(k => {
+            const v = avatarRig.allNodes[k];
+            const lc = k.toLowerCase();
+            if (!avatarRig.ref.LeftArm && lc.includes('left') && (lc.includes('arm') || lc.includes('upper')) && !lc.includes('fore') && !lc.includes('lower')) avatarRig.ref.LeftArm = v;
+            if (!avatarRig.ref.RightArm && lc.includes('right') && (lc.includes('arm') || lc.includes('upper')) && !lc.includes('fore') && !lc.includes('lower')) avatarRig.ref.RightArm = v;
+            if (!avatarRig.ref.LeftForeArm && lc.includes('left') && (lc.includes('fore') || lc.includes('lower'))) avatarRig.ref.LeftForeArm = v;
+            if (!avatarRig.ref.RightForeArm && lc.includes('right') && (lc.includes('fore') || lc.includes('lower'))) avatarRig.ref.RightForeArm = v;
+            if (!avatarRig.ref.LeftHand && lc.includes('left') && lc.includes('hand')) avatarRig.ref.LeftHand = v;
+            if (!avatarRig.ref.RightHand && lc.includes('right') && lc.includes('hand')) avatarRig.ref.RightHand = v;
+          });
+          console.log('[ISL] After fallback search:', Object.entries(avatarRig.ref).map(([k,v])=>k+':'+(v?'✓':'✗')).join(', '));
+        }
 
         // Bone aliases for high-level controls
         avatarRig.head = avatarRig.bones['Head'];
@@ -1260,16 +1336,37 @@
     function applyFingerCurlBones(prefix, curls, isLeft) {
       if (!avatarRig.bones) return;
       const bones = avatarRig.bones;
+      const allNodes = avatarRig.allNodes || {};
       const fingerNames = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky'];
       const curlScale = 1.25;
+
+      function getFinger(prefix, fname, num) {
+        // Try multiple naming conventions
+        const tries = [
+          prefix + 'Hand' + fname + num,
+          prefix + '_Hand_' + fname + '_' + num,
+          'mixamorig' + prefix + 'Hand' + fname + num,
+          prefix.toLowerCase() + '_' + fname.toLowerCase() + '_' + num,
+          prefix + fname + 'Finger' + num,
+        ];
+        for (const t of tries) {
+          if (bones[t]) return bones[t];
+          if (allNodes[t]) return allNodes[t];
+        }
+        // fuzzy
+        const lc = (prefix + fname + num).toLowerCase();
+        for (const k of Object.keys(bones)) {
+          if (k.toLowerCase().includes(prefix.toLowerCase()) && k.toLowerCase().includes(fname.toLowerCase()) && k.endsWith(String(num))) return bones[k];
+        }
+        return null;
+      }
 
       fingerNames.forEach((fname, i) => {
         const curl = curls[i] || 0;
         const total = curl * curlScale;
-
-        const b1 = bones[prefix + 'Hand' + fname + '1'];
-        const b2 = bones[prefix + 'Hand' + fname + '2'];
-        const b3 = bones[prefix + 'Hand' + fname + '3'];
+        const b1 = getFinger(prefix, fname, 1);
+        const b2 = getFinger(prefix, fname, 2);
+        const b3 = getFinger(prefix, fname, 3);
 
         if (fname === 'Thumb') {
           if (b1 && b1.userData && b1.userData.initialRotation) {
@@ -1287,37 +1384,25 @@
     }
 
     function applyArmRotations(isLeft, armPose) {
-      if (!avatarRig.bones || !armPose) return;
-      const bones = avatarRig.bones;
+      if (!avatarRig.ref || !armPose) return;
+      const ref = avatarRig.ref;
       const prefix = isLeft ? 'Left' : 'Right';
 
-      // Try multiple bone naming conventions (Mixamo, Avaturn, ReadyPlayerMe, Blender)
-      const armBone = bones[prefix + 'Arm']
-        || bones[prefix + 'UpperArm']
-        || bones[prefix.toLowerCase() + 'Arm']
-        || bones['mixamorig' + prefix + 'Arm']
-        || bones['mixamorig:' + prefix + 'Arm'];
-
-      const foreArmBone = bones[prefix + 'ForeArm']
-        || bones[prefix + 'Forearm']
-        || bones[prefix + 'LowerArm']
-        || bones[prefix.toLowerCase() + 'ForeArm']
-        || bones['mixamorig' + prefix + 'ForeArm']
-        || bones['mixamorig:' + prefix + 'ForeArm'];
-
-      const handBone = bones[prefix + 'Hand']
-        || bones[prefix.toLowerCase() + 'Hand']
-        || bones['mixamorig' + prefix + 'Hand']
-        || bones['mixamorig:' + prefix + 'Hand'];
+      const armBone     = isLeft ? ref.LeftArm     : ref.RightArm;
+      const foreArmBone = isLeft ? ref.LeftForeArm : ref.RightForeArm;
+      const handBone    = isLeft ? ref.LeftHand    : ref.RightHand;
 
       if (armBone && armPose.shoulder) {
         armBone.rotation.set(armPose.shoulder[0], armPose.shoulder[1], armPose.shoulder[2]);
+        armBone.rotation.order = 'XYZ';
       }
       if (foreArmBone && armPose.elbow) {
         foreArmBone.rotation.set(armPose.elbow[0], armPose.elbow[1], armPose.elbow[2]);
+        foreArmBone.rotation.order = 'XYZ';
       }
       if (handBone && armPose.wrist) {
         handBone.rotation.set(armPose.wrist[0], armPose.wrist[1], armPose.wrist[2]);
+        handBone.rotation.order = 'XYZ';
       }
 
       if (armPose.fingerCurl) {
@@ -1326,20 +1411,22 @@
     }
 
     function applyPoseToAvatar(pose) {
-      if (!avatarRig.isReady || !avatarRig.bones) return;
-      const bones = avatarRig.bones;
+      if (!avatarRig.isReady) return;
+      const bones = avatarRig.bones || {};
+      const ref   = avatarRig.ref   || {};
 
       // Natural Human Body Weight Shift & Leaning
-      const spineBone = bones.Spine2 || bones.Spine1 || bones.Spine;
+      const spineBone = ref.Spine || bones.Spine2 || bones.Spine1 || bones.Spine;
       if (spineBone && spineBone.userData && spineBone.userData.initialPosition) {
         spineBone.position.z = spineBone.userData.initialPosition.z + (pose.bodyShiftZ || 0);
-        spineBone.rotation.x = spineBone.userData.initialRotation.x + (pose.bodyLeanX || 0);
+        spineBone.rotation.x = (spineBone.userData.initialRotation ? spineBone.userData.initialRotation.x : 0) + (pose.bodyLeanX || 0);
       }
 
       // Head & Neck Tilt / Gaze
-      if (bones.Head && bones.Head.userData && bones.Head.userData.initialRotation) {
-        const hInit = bones.Head.userData.initialRotation;
-        bones.Head.rotation.set(
+      const headBone = ref.Head || bones.Head;
+      if (headBone && headBone.userData && headBone.userData.initialRotation) {
+        const hInit = headBone.userData.initialRotation;
+        headBone.rotation.set(
           hInit.x + (pose.head ? pose.head[0] : 0),
           hInit.y + (pose.head ? pose.head[1] : 0),
           hInit.z + (pose.head ? pose.head[2] : 0)
