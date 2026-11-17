@@ -18,25 +18,52 @@ The FastAPI backend converts the input into an ISL gloss sequence using ISL orde
 ![ISL Avatar Studio](docs/images/demo.gif)
 -->
 
-## Table of Contents
+## Quick Start (Run Locally)
 
-1. [Overview](#1-overview)
-2. [Current Status](#2-current-status)
-3. [System Workflow](#3-system-workflow)
-4. [Web Interface](#4-web-interface)
-5. [Sign Library](#5-sign-library)
-6. [Installation and Setup](#6-installation-and-setup)
-7. [Configuration](#7-configuration)
-8. [API Reference](#8-api-reference)
-9. [Data](#9-data)
-10. [Evaluation](#10-evaluation)
-11. [Testing](#11-testing)
-12. [Project Structure](#12-project-structure)
-13. [Deployment](#13-deployment)
-14. [Known Limitations](#14-known-limitations)
-15. [Future Work](#15-future-work)
-16. [Credits](#16-credits)
+### Prerequisites
+- Python 3.10+ (tested on 3.13)
+- Node.js 18+ (optional for frontend dev)
 
+### 1. Launch Backend & Web App
+```powershell
+Set-Location backend
+$env:PYTHONPATH = (Get-Location).Path
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+```
+### 2. Open in Browser
+Visit: https://isl-avatar-studio.onrender.com
+
+---
+
+## Running Automated Tests
+```powershell
+Set-Location backend
+python -m unittest discover tests
+```
+---
+
+## Project Structure
+```
+rag-speech-to-isl/
+├── backend/   # FastAPI services, models, tests
+├── data/      # Corpus, FAISS index, manifests
+├── frontend/  # public index.html (avatar) and React source
+├── docs/      # Architecture & ISL grammar docs
+├── scripts/   # Utility scripts
+├── run_backend.bat
+└── docker-compose.yml
+```
+
+---
+
+## Live Demo
+Try the application live: https://isl-avatar-studio.onrender.com/
+
+## Repository
+Source code: https://github.com/divyanshigoyal2936/isl-avatar-studio
+
+## Project Overview
+This repository implements a **RAG‑augmented Speech‑to‑Indian Sign Language (ISL) Human Avatar Generator**. It combines automatic speech recognition, retrieval‑augmented generation for domain‑specific ISL glosses, and a real‑time 3‑D avatar rendering pipeline. Users can speak or type in multiple Indian languages and see the translation expressed in accurate ISL signs performed by a realistic female Avaturn avatar. The system handles multilingual speech input, language‑aware translation respecting ISL grammar, and a curated set of 24 verified ISL signs with correct hand‑bone poses (including a refined `HELLO/Namaste` pose). All components are containerised and can be run locally or deployed via Render.
 ---
 
 ## 1. Overview
@@ -504,109 +531,5 @@ Built with FastAPI, SQLAlchemy, sentence-transformers, FAISS, OpenAI Whisper (op
 
 ---
 
-## Quick Start (Run Locally)
-
-### Prerequisites
-- Python 3.10+ (tested on 3.13)
-- Node.js 18+ (optional for frontend dev)
-
-### 1. Launch Backend & Web App
-```powershell
-Set-Location backend
-$env:PYTHONPATH = (Get-Location).Path
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
-```
-### 2. Open in Browser
-Visit: https://isl-avatar-studio.onrender.com
 
 ---
-
-## Running Automated Tests
-```powershell
-Set-Location backend
-python -m unittest discover tests
-```
----
-
-## Project Structure
-```
-rag-speech-to-isl/
-├── backend/   # FastAPI services, models, tests
-├── data/      # Corpus, FAISS index, manifests
-├── frontend/  # public index.html (avatar) and React source
-├── docs/      # Architecture & ISL grammar docs
-├── scripts/   # Utility scripts
-├── run_backend.bat
-└── docker-compose.yml
-```
-
----
-
-## Live Demo
-Try the application live: https://isl-avatar-studio.onrender.com/
-
-## Repository
-Source code: https://github.com/divyanshigoyal2936/isl-avatar-studio
-
-## Project Overview
-This repository implements a **RAG‑augmented Speech‑to‑Indian Sign Language (ISL) Human Avatar Generator**. It combines automatic speech recognition, retrieval‑augmented generation for domain‑specific ISL glosses, and a real‑time 3‑D avatar rendering pipeline. Users can speak or type in multiple Indian languages and see the translation expressed in accurate ISL signs performed by a realistic female Avaturn avatar. The system handles multilingual speech input, language‑aware translation respecting ISL grammar, and a curated set of 24 verified ISL signs with correct hand‑bone poses (including a refined `HELLO/Namaste` pose). All components are containerised and can be run locally or deployed via Render.
-
----
-
-## Project Development Workflow
-
-### 1️⃣ Problem Definition (User Request)
-- Need a clean, professional **Namaste** sign where both palms touch, with proper bone rotations and natural avatar expression.
-- Additional polish for recruiter showcase.
-
-### 2️⃣ Initial Investigation
-- Located the pose library in `frontend/public/index.html` (`COMPUTED_POSES`).
-- Identified asymmetric wrist coordinates causing a gap.
-
-### 3️⃣ Pose Fix (hands‑on)
-| Action | File | Change | Rationale |
-|--------|------|--------|-----------|
-| **Edit** | `frontend/public/index.html` (line 647) | Updated both wrist vectors to `[-0.828, 0.05, 0]` (added small Y‑offset) | Aligns wrists horizontally and raises hands so palms meet at chest height, achieving a proper Namaste.
-*Implemented via `edit_file` tool.*
-
-### 4️⃣ Local Testing
-- Reloaded the live demo and confirmed palms touch and the avatar displays a calm, sweet expression.
-
-### 5️⃣ Documentation Update
-- Added a detailed section to the README (live demo badge, repo link, project overview) and appended the workflow description above.
-
-### 6️⃣ Version‑Control Workflow
-1. Staged modified `README.md` and `frontend/public/index.html`.
-2. Committed with clear messages (`docs: update README…`, `fix: raise HELLO wrists…`).
-3. Rebased onto remote (`git pull --rebase origin main`).
-4. Pushed commits – `main` now contains the pose fix and enriched README.
-
-### 7️⃣ Full Project Upload
-- Staged all previously untracked files (avatar GLB, scripts, backend, frontend, docs).
-- Single commit `feat: add avatar model and full project source files`.
-- Pushed to GitHub, making the complete source public.
-
-### 8️⃣ Final State (as of 2026‑11‑17)
-- `main` branch holds the full backend, frontend, data assets, and documentation.
-- Avatar correctly performs Namaste.
-
-### 9️⃣ How a Recruiter Can Evaluate
-1. Clone: `git clone https://github.com/divyanshigoyal2936/isl-avatar-studio.git`
-2. Run locally (Windows):
-   ```powershell
-   Set-Location isl-avatar-studio
-   .\run_backend.bat   # FastAPI server
-   # In another terminal
-   npm install && npm run dev   # React frontend
-   ```
-3. Open UI, test speech or text input, observe avatar.
-4. Inspect `frontend/public/index.html → COMPUTED_POSES` for pose details.
-5. Run tests: `python -m unittest discover backend/tests`.
-
-## 🔚 Summary
-- **Problem solved:** Accurate, professional Namaste hand‑pose.
-- **Documentation delivered:** Comprehensive README with live demo, repo link, project overview, and step‑by‑step workflow for recruiters.
-- **Project status:** Complete, version‑controlled, ready for demo or further development.
-
----
-*Prepared by the Antigravity AI assistant on 2026‑11‑17.*
