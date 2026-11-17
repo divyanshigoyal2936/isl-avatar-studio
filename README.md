@@ -95,3 +95,12 @@ rag-speech-to-isl/
 ├── run_backend.bat          # 1-click Windows launcher
 └── docker-compose.yml
 ```
+
+## Live Demo
+Try the application live: https://isl-avatar-studio.onrender.com/
+
+## Repository
+Source code: https://github.com/divyanshigoyal2936/isl-avatar-studio
+
+## Project Overview
+This repository implements a **RAG‑augmented Speech‑to‑Indian Sign Language (ISL) Human Avatar Generator**. It combines automatic speech recognition, retrieval‑augmented generation for domain‑specific ISL glosses, and a real‑time 3‑D avatar rendering pipeline. Users can speak or type in multiple Indian languages and see the translation expressed in accurate ISL signs performed by a realistic female Avaturn avatar. The system handles multilingual speech input, language‑aware translation respecting ISL grammar, and a curated set of 24 verified ISL signs with correct hand‑bone poses (including a refined `HELLO/Namaste` pose). All components are containerised and can be run locally or deployed via Render.
