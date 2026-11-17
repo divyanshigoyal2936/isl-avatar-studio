@@ -1,0 +1,90 @@
+[
+  {
+    "id": "eval_test_001",
+    "dataset": "CURATED_BENCHMARK",
+    "split": "test",
+    "language": "en",
+    "source_text": "Where can I find a doctor?",
+    "normalized_english": "where can i find a doctor",
+    "gold_gloss": ["DOCTOR", "WHERE"],
+    "grammar_pattern": "TOPIC_QUESTION",
+    "domain": "medical"
+  },
+  {
+    "id": "eval_test_002",
+    "dataset": "CURATED_BENCHMARK",
+    "split": "test",
+    "language": "hi",
+    "source_text": "नमस्ते, मैं पानी चाहता हूँ",
+    "normalized_english": "namaste i want water",
+    "gold_gloss": ["HELLO", "ME", "WATER"],
+    "grammar_pattern": "GREETING_SOV",
+    "domain": "daily_life"
+  },
+  {
+    "id": "eval_test_003",
+    "dataset": "CURATED_BENCHMARK",
+    "split": "test",
+    "language": "en",
+    "source_text": "Good morning, please help me",
+    "normalized_english": "good morning please help me",
+    "gold_gloss": ["GOOD", "MORNING", "PLEASE", "ME", "HELP"],
+    "grammar_pattern": "TIME_POLITE_SOV",
+    "domain": "greetings"
+  },
+  {
+    "id": "eval_test_004",
+    "dataset": "CURATED_BENCHMARK",
+    "split": "test",
+    "language": "hi",
+    "source_text": "क्या अस्पताल खुला है?",
+    "normalized_english": "is the hospital open",
+    "gold_gloss": ["HOSPITAL", "YES", "WHAT"],
+    "grammar_pattern": "TOPIC_CONFIRM_QUESTION",
+    "domain": "emergency"
+  },
+  {
+    "id": "eval_test_005",
+    "dataset": "CURATED_BENCHMARK",
+    "split": "test",
+    "language": "en",
+    "source_text": "What is your name today?",
+    "normalized_english": "what is your name today",
+    "gold_gloss": ["TODAY", "YOU", "NAME", "WHAT"],
+    "grammar_pattern": "TIME_SOV_QUESTION",
+    "domain": "greetings"
+  },
+  {
+    "id": "eval_test_006",
+    "dataset": "CURATED_BENCHMARK",
+    "split": "test",
+    "language": "hi",
+    "source_text": "धन्यवाद, आप बहुत अच्छे हैं",
+    "normalized_english": "thank you you are very good",
+    "gold_gloss": ["THANK-YOU", "YOU", "GOOD"],
+    "grammar_pattern": "POLITE_SUBJECT_COMMENT",
+    "domain": "greetings"
+  },
+  {
+    "id": "eval_test_007",
+    "dataset": "CURATED_BENCHMARK",
+    "split": "test",
+    "language": "en",
+    "source_text": "I do not want to go to the hospital today",
+    "normalized_english": "i do not want go hospital today",
+    "gold_gloss": ["TODAY", "ME", "HOSPITAL", "NO"],
+    "grammar_pattern": "TIME_SOV_NEG",
+    "domain": "medical"
+  },
+  {
+    "id": "eval_test_008",
+    "dataset": "CURATED_BENCHMARK",
+    "split": "test",
+    "language": "ta",
+    "source_text": "மருத்துவர் எங்கே?",
+    "normalized_english": "where is the doctor",
+    "gold_gloss": ["DOCTOR", "WHERE"],
+    "grammar_pattern": "TOPIC_QUESTION",
+    "domain": "medical"
+  }
+]

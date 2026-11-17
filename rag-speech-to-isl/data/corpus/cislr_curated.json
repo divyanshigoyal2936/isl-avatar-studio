@@ -1,0 +1,147 @@
+[
+  {
+    "id": "cislr_001",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "hi",
+    "source_text": "पानी कहाँ मिलेगा?",
+    "normalized_english": "where can i find water",
+    "gloss_sequence": ["WATER", "WHERE"],
+    "grammar_annotations": {
+      "word_order": "TOPIC_QUESTION",
+      "topic": "WATER",
+      "question_type": "WHERE",
+      "non_manual_markers": ["EYEBROWS_FURROWED"]
+    },
+    "domain": "navigation",
+    "verified_signs": ["WATER", "WHERE"],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_002",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "en",
+    "source_text": "What is the time right now?",
+    "normalized_english": "what is time now",
+    "gloss_sequence": ["TIME", "WHAT"],
+    "grammar_annotations": {
+      "word_order": "TOPIC_QUESTION",
+      "topic": "TIME",
+      "question_type": "WHAT",
+      "non_manual_markers": ["EYEBROWS_FURROWED"]
+    },
+    "domain": "daily_life",
+    "verified_signs": ["TIME", "WHAT"],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_003",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "te",
+    "source_text": "నాకు భోజనం కావాలి",
+    "normalized_english": "i want food",
+    "gloss_sequence": ["ME", "FOOD", "WANT"],
+    "grammar_annotations": {
+      "word_order": "SOV",
+      "subject": "ME",
+      "object": "FOOD",
+      "verb": "WANT"
+    },
+    "domain": "daily_life",
+    "verified_signs": ["ME", "FOOD"],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_004",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "hi",
+    "source_text": "डॉक्टर कब आएंगे?",
+    "normalized_english": "when will the doctor come",
+    "gloss_sequence": ["DOCTOR", "TIME", "WHAT"],
+    "grammar_annotations": {
+      "word_order": "TOPIC_TIME_QUESTION",
+      "topic": "DOCTOR",
+      "question_type": "WHEN",
+      "non_manual_markers": ["EYEBROWS_RAISED"]
+    },
+    "domain": "medical",
+    "verified_signs": ["DOCTOR", "TIME", "WHAT"],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_005",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "en",
+    "source_text": "I am feeling good today",
+    "normalized_english": "i am feeling good today",
+    "gloss_sequence": ["TODAY", "ME", "GOOD"],
+    "grammar_annotations": {
+      "word_order": "TIME_SUBJECT_COMMENT",
+      "time_marker": "TODAY",
+      "subject": "ME",
+      "comment": "GOOD"
+    },
+    "domain": "daily_life",
+    "verified_signs": ["TODAY", "ME", "GOOD"],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_006",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "bn",
+    "source_text": "আপনার সাথে দেখা করে ভালো লাগলো",
+    "normalized_english": "nice to meet you",
+    "gloss_sequence": ["YOU", "MEET", "GOOD"],
+    "grammar_annotations": {
+      "word_order": "OBJECT_VERB_COMMENT",
+      "object": "YOU",
+      "verb": "MEET",
+      "comment": "GOOD"
+    },
+    "domain": "greetings",
+    "verified_signs": ["YOU", "MEET", "GOOD"],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_007",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "mr",
+    "source_text": "कृपया मला मदत करा",
+    "normalized_english": "please help me",
+    "gloss_sequence": ["PLEASE", "ME", "HELP"],
+    "grammar_annotations": {
+      "word_order": "POLITE_OBJECT_VERB",
+      "object": "ME",
+      "verb": "HELP"
+    },
+    "domain": "emergency",
+    "verified_signs": ["PLEASE", "ME", "HELP"],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_008",
+    "dataset": "CISLR",
+    "split": "val",
+    "language": "en",
+    "source_text": "No, I do not want food right now",
+    "normalized_english": "no i do not want food now",
+    "gloss_sequence": ["TIME", "ME", "FOOD", "NO"],
+    "grammar_annotations": {
+      "word_order": "TIME_SOV_NEG",
+      "time_marker": "TIME",
+      "subject": "ME",
+      "object": "FOOD",
+      "negation": "NO",
+      "non_manual_markers": ["HEAD_SHAKE"]
+    },
+    "domain": "daily_life",
+    "verified_signs": ["TIME", "ME", "FOOD", "NO"],
+    "license": "CISLR Open Academic License"
+  }
+]

@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ISLSentenceGlossRecord",
+  "description": "Schema for ISL sentence-gloss pairs from verified corpora",
+  "type": "object",
+  "required": ["id", "dataset", "split", "language", "source_text", "normalized_english", "gloss_sequence", "domain", "license"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the sentence-gloss record"
+    },
+    "dataset": {
+      "type": "string",
+      "enum": ["ISL-CSLTR", "CISLR", "CURATED_BENCHMARK"],
+      "description": "Source dataset provenance"
+    },
+    "split": {
+      "type": "string",
+      "enum": ["train", "val", "test"],
+      "description": "Dataset partition"
+    },
+    "language": {
+      "type": "string",
+      "description": "Source language code (e.g., hi, en, ta, te, bn, mr)"
+    },
+    "source_text": {
+      "type": "string",
+      "description": "Original natural language sentence"
+    },
+    "normalized_english": {
+      "type": "string",
+      "description": "Normalized English representation"
+    },
+    "gloss_sequence": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Grammatical ISL gloss sequence"
+    },
+    "grammar_annotations": {
+      "type": "object",
+      "properties": {
+        "word_order": { "type": "string", "default": "SOV" },
+        "time_marker": { "type": "string" },
+        "topic": { "type": "string" },
+        "subject": { "type": "string" },
+        "object": { "type": "string" },
+        "verb": { "type": "string" },
+        "negation": { "type": "string" },
+        "question_type": { "type": "string" },
+        "non_manual_markers": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "domain": {
+      "type": "string",
+      "enum": ["greetings", "medical", "emergency", "education", "daily_life", "navigation"]
+    },
+    "verified_signs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "license": {
+      "type": "string"
+    }
+  }
+}

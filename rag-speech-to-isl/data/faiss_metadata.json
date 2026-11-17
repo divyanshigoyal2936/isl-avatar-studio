@@ -1,0 +1,562 @@
+[
+  {
+    "id": "csltr_000_greeting",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "hi",
+    "source_text": "नमस्ते आप कैसे हो?",
+    "normalized_english": "namaste how are you you how",
+    "gloss_sequence": [
+      "HELLO",
+      "YOU",
+      "HOW"
+    ],
+    "grammar_annotations": {
+      "word_order": "GREETING_SUBJECT_QUESTION",
+      "greeting": "HELLO",
+      "subject": "YOU",
+      "question_type": "HOW",
+      "non_manual_markers": [
+        "RESPECTFUL_HEAD_NOD",
+        "EYEBROWS_RAISED",
+        "SLIGHT_HEAD_TILT"
+      ]
+    },
+    "domain": "greetings",
+    "verified_signs": [
+      "HELLO",
+      "YOU",
+      "HOW"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_000_greeting_alt",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "hi",
+    "source_text": "नमस्ते, आप कैसे हैं?",
+    "normalized_english": "namaste how are you",
+    "gloss_sequence": [
+      "HELLO",
+      "YOU",
+      "HOW"
+    ],
+    "grammar_annotations": {
+      "word_order": "GREETING_SUBJECT_QUESTION",
+      "greeting": "HELLO",
+      "subject": "YOU",
+      "question_type": "HOW",
+      "non_manual_markers": [
+        "RESPECTFUL_HEAD_NOD",
+        "EYEBROWS_RAISED",
+        "SLIGHT_HEAD_TILT"
+      ]
+    },
+    "domain": "greetings",
+    "verified_signs": [
+      "HELLO",
+      "YOU",
+      "HOW"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_001",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "en",
+    "source_text": "Good morning, how are you?",
+    "normalized_english": "good morning how are you",
+    "gloss_sequence": [
+      "GOOD",
+      "MORNING",
+      "YOU",
+      "HOW"
+    ],
+    "grammar_annotations": {
+      "word_order": "TIME_TOPIC_QUESTION",
+      "time_marker": "MORNING",
+      "subject": "YOU",
+      "question_type": "HOW",
+      "non_manual_markers": [
+        "EYEBROWS_RAISED",
+        "SLIGHT_HEAD_TILT"
+      ]
+    },
+    "domain": "greetings",
+    "verified_signs": [
+      "GOOD",
+      "MORNING",
+      "YOU",
+      "HOW"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_002",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "hi",
+    "source_text": "नमस्ते, आपका नाम क्या है?",
+    "normalized_english": "namaste what is your name",
+    "gloss_sequence": [
+      "HELLO",
+      "YOU",
+      "NAME",
+      "WHAT"
+    ],
+    "grammar_annotations": {
+      "word_order": "TOPIC_SUBJECT_OBJECT_QUESTION",
+      "subject": "YOU",
+      "object": "NAME",
+      "question_type": "WHAT",
+      "non_manual_markers": [
+        "EYEBROWS_FURROWED"
+      ]
+    },
+    "domain": "greetings",
+    "verified_signs": [
+      "HELLO",
+      "YOU",
+      "NAME",
+      "WHAT"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_003",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "en",
+    "source_text": "Where is the hospital?",
+    "normalized_english": "where is the hospital",
+    "gloss_sequence": [
+      "HOSPITAL",
+      "WHERE"
+    ],
+    "grammar_annotations": {
+      "word_order": "TOPIC_QUESTION",
+      "topic": "HOSPITAL",
+      "question_type": "WHERE",
+      "non_manual_markers": [
+        "EYEBROWS_FURROWED",
+        "HEAD_TILT"
+      ]
+    },
+    "domain": "emergency",
+    "verified_signs": [
+      "HOSPITAL",
+      "WHERE"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_004",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "hi",
+    "source_text": "मुझे डॉक्टर की मदद चाहिए",
+    "normalized_english": "i need help from a doctor",
+    "gloss_sequence": [
+      "ME",
+      "DOCTOR",
+      "HELP",
+      "WANT"
+    ],
+    "grammar_annotations": {
+      "word_order": "SOV",
+      "subject": "ME",
+      "object": "DOCTOR",
+      "verb": "HELP"
+    },
+    "domain": "medical",
+    "verified_signs": [
+      "ME",
+      "DOCTOR",
+      "HELP"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_005",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "en",
+    "source_text": "Please give me water",
+    "normalized_english": "please give me water",
+    "gloss_sequence": [
+      "PLEASE",
+      "ME",
+      "WATER",
+      "GIVE"
+    ],
+    "grammar_annotations": {
+      "word_order": "POLITE_SOV",
+      "subject": "ME",
+      "object": "WATER",
+      "verb": "GIVE"
+    },
+    "domain": "daily_life",
+    "verified_signs": [
+      "PLEASE",
+      "ME",
+      "WATER"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_006",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "hi",
+    "source_text": "आज मैं स्कूल नहीं जाऊंगा",
+    "normalized_english": "today i will not go to school",
+    "gloss_sequence": [
+      "TODAY",
+      "ME",
+      "SCHOOL",
+      "GO",
+      "NO"
+    ],
+    "grammar_annotations": {
+      "word_order": "TIME_SOV_NEG",
+      "time_marker": "TODAY",
+      "subject": "ME",
+      "object": "SCHOOL",
+      "verb": "GO",
+      "negation": "NO",
+      "non_manual_markers": [
+        "HEAD_SHAKE"
+      ]
+    },
+    "domain": "education",
+    "verified_signs": [
+      "TODAY",
+      "ME",
+      "NO"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_007",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "en",
+    "source_text": "Thank you very much for your help",
+    "normalized_english": "thank you very much for help",
+    "gloss_sequence": [
+      "THANK-YOU",
+      "HELP",
+      "GOOD"
+    ],
+    "grammar_annotations": {
+      "word_order": "EXPRESSION_TOPIC_COMMENT",
+      "topic": "HELP",
+      "comment": "GOOD"
+    },
+    "domain": "greetings",
+    "verified_signs": [
+      "THANK-YOU",
+      "HELP",
+      "GOOD"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_008",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "ta",
+    "source_text": "உங்களுக்கு உதவி வேண்டுமா?",
+    "normalized_english": "do you need help",
+    "gloss_sequence": [
+      "YOU",
+      "HELP",
+      "WANT",
+      "WHAT"
+    ],
+    "grammar_annotations": {
+      "word_order": "SOV_QUESTION",
+      "subject": "YOU",
+      "object": "HELP",
+      "verb": "WANT",
+      "question_type": "YES_NO",
+      "non_manual_markers": [
+        "EYEBROWS_RAISED"
+      ]
+    },
+    "domain": "emergency",
+    "verified_signs": [
+      "YOU",
+      "HELP",
+      "WHAT"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_009",
+    "dataset": "ISL-CSLTR",
+    "split": "val",
+    "language": "hi",
+    "source_text": "क्या आप ठीक हैं?",
+    "normalized_english": "are you alright",
+    "gloss_sequence": [
+      "YOU",
+      "GOOD",
+      "YES"
+    ],
+    "grammar_annotations": {
+      "word_order": "TOPIC_COMMENT_CONFIRM",
+      "subject": "YOU",
+      "comment": "GOOD",
+      "non_manual_markers": [
+        "EYEBROWS_RAISED"
+      ]
+    },
+    "domain": "medical",
+    "verified_signs": [
+      "YOU",
+      "GOOD",
+      "YES"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "csltr_010",
+    "dataset": "ISL-CSLTR",
+    "split": "train",
+    "language": "en",
+    "source_text": "Welcome to India",
+    "normalized_english": "welcome to india",
+    "gloss_sequence": [
+      "INDIA",
+      "WELCOME"
+    ],
+    "grammar_annotations": {
+      "word_order": "TOPIC_GREETING",
+      "topic": "INDIA",
+      "comment": "WELCOME"
+    },
+    "domain": "greetings",
+    "verified_signs": [
+      "INDIA",
+      "WELCOME"
+    ],
+    "license": "CC-BY-NC 4.0 Research"
+  },
+  {
+    "id": "cislr_001",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "hi",
+    "source_text": "पानी कहाँ मिलेगा?",
+    "normalized_english": "where can i find water",
+    "gloss_sequence": [
+      "WATER",
+      "WHERE"
+    ],
+    "grammar_annotations": {
+      "word_order": "TOPIC_QUESTION",
+      "topic": "WATER",
+      "question_type": "WHERE",
+      "non_manual_markers": [
+        "EYEBROWS_FURROWED"
+      ]
+    },
+    "domain": "navigation",
+    "verified_signs": [
+      "WATER",
+      "WHERE"
+    ],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_002",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "en",
+    "source_text": "What is the time right now?",
+    "normalized_english": "what is time now",
+    "gloss_sequence": [
+      "TIME",
+      "WHAT"
+    ],
+    "grammar_annotations": {
+      "word_order": "TOPIC_QUESTION",
+      "topic": "TIME",
+      "question_type": "WHAT",
+      "non_manual_markers": [
+        "EYEBROWS_FURROWED"
+      ]
+    },
+    "domain": "daily_life",
+    "verified_signs": [
+      "TIME",
+      "WHAT"
+    ],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_003",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "te",
+    "source_text": "నాకు భోజనం కావాలి",
+    "normalized_english": "i want food",
+    "gloss_sequence": [
+      "ME",
+      "FOOD",
+      "WANT"
+    ],
+    "grammar_annotations": {
+      "word_order": "SOV",
+      "subject": "ME",
+      "object": "FOOD",
+      "verb": "WANT"
+    },
+    "domain": "daily_life",
+    "verified_signs": [
+      "ME",
+      "FOOD"
+    ],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_004",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "hi",
+    "source_text": "डॉक्टर कब आएंगे?",
+    "normalized_english": "when will the doctor come",
+    "gloss_sequence": [
+      "DOCTOR",
+      "TIME",
+      "WHAT"
+    ],
+    "grammar_annotations": {
+      "word_order": "TOPIC_TIME_QUESTION",
+      "topic": "DOCTOR",
+      "question_type": "WHEN",
+      "non_manual_markers": [
+        "EYEBROWS_RAISED"
+      ]
+    },
+    "domain": "medical",
+    "verified_signs": [
+      "DOCTOR",
+      "TIME",
+      "WHAT"
+    ],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_005",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "en",
+    "source_text": "I am feeling good today",
+    "normalized_english": "i am feeling good today",
+    "gloss_sequence": [
+      "TODAY",
+      "ME",
+      "GOOD"
+    ],
+    "grammar_annotations": {
+      "word_order": "TIME_SUBJECT_COMMENT",
+      "time_marker": "TODAY",
+      "subject": "ME",
+      "comment": "GOOD"
+    },
+    "domain": "daily_life",
+    "verified_signs": [
+      "TODAY",
+      "ME",
+      "GOOD"
+    ],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_006",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "bn",
+    "source_text": "আপনার সাথে দেখা করে ভালো লাগলো",
+    "normalized_english": "nice to meet you",
+    "gloss_sequence": [
+      "YOU",
+      "MEET",
+      "GOOD"
+    ],
+    "grammar_annotations": {
+      "word_order": "OBJECT_VERB_COMMENT",
+      "object": "YOU",
+      "verb": "MEET",
+      "comment": "GOOD"
+    },
+    "domain": "greetings",
+    "verified_signs": [
+      "YOU",
+      "MEET",
+      "GOOD"
+    ],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_007",
+    "dataset": "CISLR",
+    "split": "train",
+    "language": "mr",
+    "source_text": "कृपया मला मदत करा",
+    "normalized_english": "please help me",
+    "gloss_sequence": [
+      "PLEASE",
+      "ME",
+      "HELP"
+    ],
+    "grammar_annotations": {
+      "word_order": "POLITE_OBJECT_VERB",
+      "object": "ME",
+      "verb": "HELP"
+    },
+    "domain": "emergency",
+    "verified_signs": [
+      "PLEASE",
+      "ME",
+      "HELP"
+    ],
+    "license": "CISLR Open Academic License"
+  },
+  {
+    "id": "cislr_008",
+    "dataset": "CISLR",
+    "split": "val",
+    "language": "en",
+    "source_text": "No, I do not want food right now",
+    "normalized_english": "no i do not want food now",
+    "gloss_sequence": [
+      "TIME",
+      "ME",
+      "FOOD",
+      "NO"
+    ],
+    "grammar_annotations": {
+      "word_order": "TIME_SOV_NEG",
+      "time_marker": "TIME",
+      "subject": "ME",
+      "object": "FOOD",
+      "negation": "NO",
+      "non_manual_markers": [
+        "HEAD_SHAKE"
+      ]
+    },
+    "domain": "daily_life",
+    "verified_signs": [
+      "TIME",
+      "ME",
+      "FOOD",
+      "NO"
+    ],
+    "license": "CISLR Open Academic License"
+  }
+]

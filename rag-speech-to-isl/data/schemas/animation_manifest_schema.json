@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ISLAnimationManifest",
+  "description": "Schema for ISL 3D animation clip metadata and skeletal annotations",
+  "type": "object",
+  "required": ["gloss_id", "hand_dominance", "hand_shape", "palm_orientation", "signing_space", "duration_ms", "validation_status"],
+  "properties": {
+    "gloss_id": {
+      "type": "string",
+      "description": "Primary standard gloss token"
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "provenance": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string"
+    },
+    "hand_dominance": {
+      "type": "string",
+      "enum": ["dominant_only", "bimanual_symmetric", "bimanual_asymmetric"]
+    },
+    "hand_shape": {
+      "type": "string",
+      "enum": ["OPEN_FLAT", "FIST_A", "INDEX_1", "CLAW_5", "PINCH_C", "V_SHAPE", "CUP", "THUMBS_UP", "B_HAND"]
+    },
+    "palm_orientation": {
+      "type": "string",
+      "enum": ["INWARD", "OUTWARD", "UPWARD", "DOWNWARD", "TOWARDS_OPPOSITE", "FORWARD"]
+    },
+    "signing_space": {
+      "type": "string",
+      "enum": ["CHEST_CENTER", "CHEST_RIGHT", "CHEST_LEFT", "HEAD_TEMPLE", "CHIN", "MOUTH", "WRIST_OPPOSITE", "NEUTRAL_SPACE"]
+    },
+    "movement_type": {
+      "type": "string",
+      "enum": ["HOLD", "LINEAR_STROKE", "CIRCULAR", "REPEATED_TAP", "ARC_WAVE", "OPENING_EXPANSION", "NODDING"]
+    },
+    "non_manual_markers": {
+      "type": "object",
+      "properties": {
+        "eyebrow": { "type": "string", "enum": ["NEUTRAL", "RAISED", "FURROWED"] },
+        "head": { "type": "string", "enum": ["NEUTRAL", "NOD", "SHAKE", "TILT"] },
+        "mouth": { "type": "string", "enum": ["NEUTRAL", "SMILE", "ROUND_O", "MOUTHING"] }
+      }
+    },
+    "duration_ms": {
+      "type": "integer",
+      "minimum": 300,
+      "maximum": 5000
+    },
+    "transition_in_ms": {
+      "type": "integer",
+      "default": 150
+    },
+    "transition_out_ms": {
+      "type": "integer",
+      "default": 150
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": ["VERIFIED", "CURATED", "UNSUPPORTED"]
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}
